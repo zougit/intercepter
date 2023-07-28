@@ -1,0 +1,100 @@
+{
+  "title": {
+    "site": "Intercepter BackOffice",
+    "welcome": "Welcome",
+    "myAccount": "My account",
+    "customers": "Customers",
+    "zones": "Zones",
+    "dealerships": "Dealership zones",
+    "converters": "Converters zones",
+    "alarms": "Alarms",
+    "users": "Users",
+    "pageAdd": "Add",
+    "pageEdit": "Edit",
+    "pageAddUser": "Add user",
+    "pageEditUser": "Edit user",
+    "pageDevice": "Device management",
+    "myZone": "My zone",
+    "device1": "Sentinel devices",
+    "devices": "Sentinel devices",
+    "deviceBase": "Devices",
+    "multEdit": "multiEdit"
+  },
+
+  "form": {
+    "deveui": "DevEui",
+    "appk": "AppKey",
+    "name": "Name",
+    "zone": "Zone",
+    "client": "Customer",
+    "type": "Sensor type",
+    "model": "Model",
+    "color": "Color",
+    "reference": "Reference",
+    "clientName": "Client name",
+    "createZone": "Create zone",
+    "username": "Name",
+    "password": "Password",
+    "r_password": "Repeat Password",
+    "role": "Role",
+    "region": "Region",
+    "active": "Active"
+  },
+  "deconnexion": "Logout",
+  "roles": {
+    "admin": "Administrator",
+    "user": "User",
+    "director": "Director",
+    "employe": "Employee"
+  },
+
+  "dealerships": "Dealership",
+  "converters": "Converters",
+  "btn": {
+    "cancel": "Cancel",
+    "validate": "Validate"
+  },
+
+  "tab": {
+    "edit": "Edit",
+    "del": "Delete",
+    "name": "Name",
+    "firstname": "First name",
+    "login": "Login",
+    "pass": "Password",
+    "role": "Role",
+    "customer": "Customer",
+    "zone": "Zone",
+    "type": "Type",
+    "actif": "Active",
+    "customName": "Client name",
+    "status": "Current Status Apps",
+    "reference": "Reference",
+    "last_cnx": "Communication",
+    "detail": "Details",
+    "alarm": "Alarm",
+    "vehic": "Vehicle",
+    "temp": "Temperature",
+    "batt": "Battery",
+    "typeDevice": "Sensor type",
+    "typeUser": "User type",
+    "model": "Model",
+    "color": "Color",
+    "pict": "Picture",
+    "upload": "Upload an image",
+    "noResult": "No result",
+    "csv": "File CSV",
+    "dateHourServ": "Server Date/Time",
+    "dateHourLocal": "Local Date/Time",
+    "deveui": "deveui",
+    "cgId": "CloudGate",
+    "id": "ID",
+    "nbDevices": "Nb Devices",
+    "option": "Option",
+    "details": "Details"
+  },
+
+  "error": {
+    "invalidField": "This field is required"
+  }
+}

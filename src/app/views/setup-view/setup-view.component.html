@@ -1,0 +1,81 @@
+<h2>Import CSV devices</h2>
+<div *ngIf="!isSubmit">
+  
+  <div class="alert alert-light">
+    <p>
+      Formulaire pour uploader en masse les devices via un fichier CSV. <br />
+      Si un DevEui existe déjà, il ne sera pas ajouté et l'import se poursuivra.
+    </p>
+    <p>
+      Dans le CSV, mettre un device par ligne, chaque champ séparé par un "point
+      virgule" : <br />
+      <i>deveui_du_device; appkey_du_device; nom_du_device</i>
+    </p>
+  </div>
+  
+  <form [formGroup]="addForm" (ngSubmit)="onClickSubmit()">
+    <div *ngIf="errorMsg" class="alert alert-danger">
+      {{ errorMsg }}
+    </div>
+  
+    <div *ngFor="let t of tabSelect" class="row">
+      <label>{{ "form." + t.name | transloco }} *</label>
+  
+      <div
+        *ngIf="
+          (addForm.controls[t.name].dirty || addForm.controls[t.name].touched) &&
+          addForm.controls[t.name].invalid
+        "
+        class="alert alert-danger"
+      >
+        {{ "error.invalidField" | transloco }}
+      </div>
+  
+      <select
+        [formControlName]="t.name"
+        #s
+        (change)="getZoneForCustomerId(s.value,t.name)"
+      >
+        <option value="" selected></option>
+        <option *ngFor="let cell of t.key" [value]="cell.id ? cell.id : cell">
+          {{ cell.name ? cell.name : cell }}
+        </option>
+      </select>
+    </div>
+  
+    <div class="row">
+      <label>{{ "form.fileCSV" | transloco }} *</label>
+      <div
+        *ngIf="
+          (addForm.controls['csv'].dirty || addForm.controls['csv'].touched) &&
+          addForm.controls['csv'].invalid
+        "
+        class="alert alert-danger"
+      >
+        {{ "error.invalidField" | transloco }}
+      </div>
+  
+      <input type="file" formControlName="csv" (change)="onFileSelected($event)" >
+    </div>
+  
+    <div class="row submit">
+      <button *transloco="let t" routerLink="/setup" class="btn cancel">
+        {{ t("btn.cancel") }}
+      </button>
+      <button
+        type="submit"
+        *transloco="let t"
+        [disabled]="addForm.invalid"
+        class="btn"
+      >
+        {{ t("btn.validate") }}
+      </button>
+    </div>
+  </form>
+</div>
+
+<div *ngIf="isSubmit">
+<div *ngFor="let msg of fileMsg">
+  <p [ngClass]="msg.class"> {{msg.name}} </p>
+</div>
+</div>

@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "intercepter-angular": {
+      "hosting": {
+        "intercepter-angular": [
+          "intercepter-angular"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "intercepter-angular"
+  }
+}

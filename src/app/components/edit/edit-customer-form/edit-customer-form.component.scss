@@ -1,0 +1,10 @@
+.row.action-affect {
+    width: 25%;
+    align-self: flex-end;
+    gap: 5px;
+    justify-content: flex-end;
+    * {
+        min-width: 40%;
+        padding: 0;
+    }
+  }

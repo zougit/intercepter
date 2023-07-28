@@ -1,0 +1,78 @@
+@use "@material/switch/switch" as mdc-switch;
+@use "@material/switch/switch-theme" as mdc-switch-theme;
+
+$not-full-white: #f0f7ff;
+$grey: #a8b3bf99;
+$light-grey: #a8b3bf;
+$white: white;
+$not-full-black: #343a40;
+$green: green;
+$colors: (
+  "green": #039803,
+  "black": #3e3c3c,
+  "red": red,
+  "orange": #ea7901,
+  "blue": #0094ff,
+  "violet": #8f00c2,
+);
+
+@each $name, $color in $colors {
+  .#{$name} {
+    color: $color;
+  }
+}
+
+
+// rewrite Angular 15 switchers new look
+$_color-selected-handle:$white;
+$_color-selected-track: #41adff;
+
+$_color-unselected-handle:$white;
+$_color-unselected-track: #ccc;
+
+$_color-disabled-selected-track: $_color-selected-track;
+$_color-disabled-unselected-track: $_color-unselected-track;
+
+.mat-mdc-slide-toggle {
+
+  .mdc-switch {
+
+    @include  mdc-switch-theme.theme((
+//handle color
+      disabled-selected-handle-color: $_color-selected-handle,
+      disabled-unselected-handle-color: $_color-unselected-handle,
+
+      selected-handle-color: $_color-selected-handle,
+      selected-focus-handle-color: $_color-selected-handle,
+      selected-hover-handle-color: $_color-selected-handle,
+      selected-pressed-handle-color: $_color-selected-handle,
+
+      unselected-handle-color: $_color-unselected-handle,
+      unselected-focus-handle-color: $_color-unselected-handle,
+      unselected-hover-handle-color: $_color-unselected-handle,
+      unselected-pressed-handle-color: $_color-unselected-handle,
+
+//tracks color
+      disabled-selected-track-color: $_color-selected-track,
+      disabled-unselected-track-color: $_color-unselected-track,
+
+      selected-track-color: $_color-selected-track,
+      selected-focus-track-color: $_color-selected-track,
+      selected-hover-track-color: $_color-selected-track,
+      selected-pressed-track-color: $_color-selected-track,
+
+      unselected-track-color: $_color-unselected-track,
+      unselected-focus-track-color: $_color-unselected-track,
+      unselected-hover-track-color: $_color-unselected-track,
+      unselected-pressed-track-color: $_color-unselected-track,
+// icon colors
+
+      disabled-selected-icon-color:  none,
+      disabled-unselected-icon-color: none,
+      selected-icon-color: none,
+      unselected-icon-color: none,
+
+    ));
+
+  }
+}

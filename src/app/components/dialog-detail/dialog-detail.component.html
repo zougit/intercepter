@@ -1,0 +1,32 @@
+<div class="dialog">
+  <div class="title">
+    <span>
+      <b>{{ "tab.detail" | transloco }}</b>
+    </span>
+    <button (click)="onNoClick()">&times;</button>
+  </div>
+  <div class="content">
+    <p>DevEui : {{ data.deveui }}</p>
+    <p>Zone : {{ data.zone }}</p>
+    <br />
+
+    <div *ngIf="data.model || data.color || data.reference || data.imgPath">
+      <p>
+        <b> {{ "vehicle" }} </b>
+      </p>
+      <p *ngIf="data.model && data.color">{{ data.model }}, {{ data.color }}</p>
+      <p *ngIf="data.reference">
+        {{ "Reference" }} {{ data.reference }}
+      </p>
+      <img *ngIf="data.imgPath" [src]="data.imgPath" width="100%" alt="">
+    </div>
+
+    <br />
+    <ul *ngIf="data.item1 || data.item2 || data.item3 || data.item4">
+      <li *ngIf="data.item1">{{ "temperature" }} : {{ data.item1 }} °C</li>
+      <li *ngIf="data.item2">{{ "battery" }} : {{ data.item2 }}%</li>
+      <li *ngIf="data.item3">RSSI : {{ data.item3 }} dBm</li>
+      <li *ngIf="data.item4">SF (Spreading Factor): {{ data.item4 }} dBm</li>
+    </ul>
+  </div>
+</div>

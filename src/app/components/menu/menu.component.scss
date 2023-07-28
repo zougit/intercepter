@@ -1,0 +1,117 @@
+@use "sass:map";
+@use "sass:string";
+@use "src/colors";
+
+.top-menu {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  background-color: #343a40;
+  color: white;
+  min-width: 140px;
+  width: 250px;
+  .title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .img {
+      height: 90vw;
+      padding: 0 5px;
+      margin: 0;
+      max-height: 3.5vw;
+    }
+  }
+  .text-title {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.8em;
+  }
+  .nav {
+    margin-left: 10px;
+    margin-top: 3px;
+    margin-bottom: 10px;
+  }
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: normal;
+}
+
+.main-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  button {
+    background: colors.$grey;
+    padding-left: 20px;
+    position: relative;
+    border: none;
+    width: 100%;
+    height: 40px;
+    text-align: left;
+  }
+  li {
+    display: block;
+    &.active {
+      // font-weight: bold;
+      button {
+        // background: #0094ff;
+        background: map.get(colors.$colors, "blue");
+        color: colors.$not-full-white;
+      }
+      ul {
+        button {
+          background: colors.$grey;
+          color: inherit;
+        }
+        font-weight: normal;
+      }
+    }
+    &.disabled-link {
+      button {
+        cursor: auto;
+      }
+      li:not(.disabled-link) button {
+        cursor: pointer;
+      }
+    }
+    button {
+      font-size: 13px;
+      background: colors.$light-grey;
+      // padding: 10px;
+      padding: 10px 10px 10px 20px;
+      position: relative;
+      display: block;
+      margin-bottom: 1px;
+      cursor: pointer;
+      // &:hover {
+      //     background: #a8b3bf70;
+      // }
+    }
+    &:not(.disabled-link) button:hover {
+      background: map.get(colors.$colors, "blue");
+      /* font-weight: bold; */
+      color: colors.$not-full-white;
+    }
+    ul {
+      margin: 0;
+      padding: 0;
+      button {
+        background: colors.$grey;
+        padding-left: 20px;
+        position: relative;
+      }
+      li.active {
+        button {
+          // background: #0094ff;
+          background: map.get(colors.$colors, "blue");
+          color: colors.$not-full-white;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+<div class="row align-center">
+  <h2 *transloco="let t">{{ "title." + path | transloco }}</h2>
+  <button class="btn-blue left" *transloco="let t" routerLink="/{{ path }}/add">
+    {{ t("title.pageAdd") }}
+  </button>
+</div>
+
+<div class="row align-center filtre">
+  <h3>Filters:</h3>
+  <div class="select row">
+    <label for="customers">Customers </label>
+    <select name="customers" #sz (change)="getByCustomer(sz.value)">
+      <option value=""></option>
+      <option *ngFor="let customer of customerZone" [value]="customer.id">
+        {{ customer.name }}
+      </option>
+    </select>
+  </div>
+</div>
+
+<app-tableau
+  [thead]="path === 'dealerships' ? theadConcession : theadCatalyseur"
+  [content]="zoneType"
+  [page]="path"
+  [service]="zoneService"
+/>

@@ -1,0 +1,27 @@
+<div class="row align-center ">
+    <h2 *transloco="let t"> {{ t("title.devices") }} </h2>
+    <div>
+        <button class="btn-blue left" *transloco="let t" routerLink="/devices/add"> {{ t("title.pageAdd") }} </button>
+        <button class="btn-blue left" [disabled]="!boxChecked" *transloco="let t" routerLink="/devices/multiEdit"> {{ t("title.multEdit") }} </button>
+    </div>
+</div>
+
+<div class="row align-center filtre">
+    <h3>Filters:</h3>
+    <div class="select row">
+        <label for="zones">Zone </label>
+        <select name="zones" #sz (change)="getByZone(sz.value)">
+            <option value=""></option>
+            <option *ngFor="let zone of zones" [value]="zone.id"> {{zone.name}} </option>
+        </select>
+    </div>
+    <div class="select row">
+        <label for="types">Customer Types </label>
+        <select name="types" #st (change)="getByType(st.value)">
+            <option value=""></option>
+            <option *ngFor="let type of types" [value]="type.id"> {{type.name | transloco}} </option>
+        </select>
+    </div>
+</div>
+
+<app-tableau [thead]="thead" [content]="devicesTab" page="devicesTab" [service]="deviceService" (boxCheckEmitter)="addBox($event)" />

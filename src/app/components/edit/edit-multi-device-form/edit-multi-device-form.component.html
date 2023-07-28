@@ -1,0 +1,107 @@
+<form [formGroup]="editForm" (ngSubmit)="onClickSubmit()" class="w_100">
+  <div *ngIf="errorMsg" class="alert alert-danger">
+    {{ errorMsg }}
+  </div>
+  <div formArrayName="names">
+    <fieldset *ngFor="let name of names.controls; let i = index">
+      <div class="row">
+        <div [formGroupName]="i" class="column">
+          <div *ngFor="let t of tab" class="row">
+            <label>{{ "form." + t | transloco }} *</label>
+
+            <div
+              *ngIf="(name.dirty || name.touched) && name.invalid"
+              class="alert alert-danger"
+            >
+              {{ "error.invalidField" | transloco }}
+            </div>
+
+            <input type="text" [formControlName]="t" />
+          </div>
+
+          <div class="row">
+            <label>{{ "form.client" | transloco }} *</label>
+
+            <div
+              *ngIf="(name.dirty || name.touched) && name.invalid"
+              class="alert alert-danger"
+            >
+              {{ "error.invalidField" | transloco }}
+            </div>
+
+            <select
+              [formControlName]="'client'"
+              #s
+              (change)="getZoneForCustomerId(s.value, i, 'client')"
+            >
+              <option value="" selected>Choisir</option>
+              <option
+                *ngFor="let cell of customers"
+                [value]="cell.id ? cell.id : cell"
+              >
+                {{ cell.name ? cell.name : cell }}
+              </option>
+            </select>
+          </div>
+          <div class="row">
+            <label>{{ "form.zone" | transloco }} *</label>
+
+            <div
+              *ngIf="(name.dirty || name.touched) && name.invalid"
+              class="alert alert-danger"
+            >
+              {{ "error.invalidField" | transloco }}
+            </div>
+
+            <select [formControlName]="'zone'">
+              <option value="" selected></option>
+              <option
+                *ngFor="let cell of zonesDevices[i]"
+                [value]="cell.id ? cell.id : cell"
+              >
+                {{ cell.name ? cell.name : cell }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="column alert">
+          <div class="alert alert-light">
+            <p *ngIf="devices[i]">
+              Type de capteur : <b>{{ devices[i].type }}</b>
+            </p>
+            <p *ngIf="devices[i]">appKey : {{ devices[i].appk }}</p>
+            <div
+              *ngIf="
+                (hasProp(devices[i], 'model') ||
+                  hasProp(devices[i], 'color') ||
+                  hasProp(devices[i], 'reference')) &&
+                (devices[i].model || devices[i].color || devices[i].reference)
+              "
+            >
+              <span><b>Voiture : </b></span>
+              <span *ngIf="devices[i].model"> {{ devices[i].model }},</span>
+              <span *ngIf="devices[i].color">{{ devices[i].color }} </span>
+              <br />
+              <span *ngIf="devices[i].reference">
+                Reference : {{ devices[i].reference }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+  <div class="row submit">
+    <button *transloco="let t" routerLink="/devices" class="btn cancel">
+      {{ t("btn.cancel") }}
+    </button>
+    <button
+      type="submit"
+      *transloco="let t"
+      [disabled]="editForm.invalid"
+      class="btn"
+    >
+      {{ t("btn.validate") }}
+    </button>
+  </div>
+</form>

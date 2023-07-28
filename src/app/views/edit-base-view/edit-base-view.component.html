@@ -1,0 +1,3 @@
+<h2 *transloco="let t">{{ "title."+page | transloco }} > {{ t("title.pageEdit") }} </h2>
+<app-edit-customer-form *ngIf="page == 'customers'" [id]="id"></app-edit-customer-form>
+<app-edit-device-form *ngIf="page == 'devices'" [id]="id"></app-edit-device-form>

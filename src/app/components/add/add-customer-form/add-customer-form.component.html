@@ -1,0 +1,67 @@
+<form [formGroup]="addForm" (ngSubmit)="onClickSubmit()">
+  <div *ngIf="errorMsg" class="alert alert-danger">
+    {{ errorMsg }}
+  </div>
+
+  <div class="row">
+    <label>{{ "form.clientName" | transloco }} *</label>
+
+    <div
+      *ngIf="
+        (addForm.controls['name'].dirty || addForm.controls['name'].touched) &&
+        addForm.controls['name'].invalid
+      "
+      class="alert alert-danger"
+    >
+      {{ "error.invalidField" | transloco }}
+    </div>
+
+    <input type="text" formControlName="name" />
+  </div>
+
+  <div class="row">
+    <label>Type *</label>
+
+    <div
+    *ngIf="
+      (addForm.controls['type'].dirty || addForm.controls['type'].touched) &&
+      addForm.controls['type'].invalid
+    "
+    class="alert alert-danger"
+  >
+    {{ "error.invalidField" | transloco }}
+  </div>
+
+    <select formControlName="type">
+      <option value="" selected>Choisir</option>
+      <option *ngFor="let cell of types" [value]="cell.id">
+        {{ cell.name | transloco}}
+      </option>
+    </select>
+  </div>
+
+  <div *ngFor="let item of [].constructor(cpt); let i = index" class="row">
+    <label>{{ "form.createZone" | transloco }} ({{ i + 1 }})</label>
+
+    <input type="text" [(ngModel)]="zones[i]" [ngModelOptions]="{standalone: true}"/>
+  </div>
+
+  <div class="row action-affect">
+    <button type="button" (click)="onClickCpt('minus')" class="btn normal">-</button>
+    <button type="button" (click)="onClickCpt('plus')" class="btn normal">+</button>
+  </div>
+
+  <div class="row submit">
+    <button *transloco="let t" routerLink="/customers" class="btn cancel">
+      {{ t("btn.cancel") }}
+    </button>
+    <button
+      type="submit"
+      *transloco="let t"
+      [disabled]="addForm.invalid"
+      class="btn"
+    >
+      {{ t("btn.validate") }}
+    </button>
+  </div>
+</form>

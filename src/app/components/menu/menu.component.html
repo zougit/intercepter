@@ -1,0 +1,62 @@
+<div class="top-menu">
+  <div class="title">
+    <img class="img" src="../assets/img/intercepterlogosimple.png" alt="" />
+    <h1 class="text-title">
+      Intercepter
+      <small style="font-size: 16px">BackOffice</small>
+    </h1>
+  </div>
+  <h2 class="nav">Navigation</h2>
+</div>
+
+<div class="menu">
+  <ul class="main-menu" >
+    <li class="niv-1" [ngClass]="{'active': isBtnActive === 1}">
+      <button *transloco="let t" (click)="toggleBtn(1)" routerLink=""> {{t("title.welcome")}} </button>
+    </li>
+
+    <li class="niv-1" [ngClass]="{'active': isBtnActive === 2}">
+      <button *transloco="let t" (click)="toggleBtn(2)" routerLink="my-account">{{t("title.myAccount")}}</button>
+    </li>
+
+    <li class="niv-1" [ngClass]="{'active': isBtnActive === 3}">
+        <button *transloco="let t" (click)="toggleBtn(3)" routerLink="admin-bo">Admins BackOffice</button>
+    </li>
+    <li class="niv-1" [ngClass]="{'active': isBtnActive === 4}">
+      <button *transloco="let t" (click)="toggleBtn(4)" routerLink="customers">{{t("title.customers")}}</button>
+      <ul>
+        <li class="niv-2" [ngClass]="{'active': isBtnActive === 5}" data-type="1">
+          <button *transloco="let t" (click)="toggleBtn(5)" routerLink="zone/dealerships">{{t("title.dealerships")}}</button>
+        </li>
+        <li class="niv-2" [ngClass]="{'active': isBtnActive === 6}" data-type="2">
+          <button *transloco="let t" (click)="toggleBtn(6)" routerLink="zone/converters">{{t("title.converters")}}</button>
+        </li>
+      </ul>
+    </li>
+    <li class="niv-1 disabled-link">
+      <button *transloco="let t">{{t("title.deviceBase")}}</button>
+      <ul>
+        <li class="niv-2" [ngClass]="{'active': isBtnActive === 8}" >
+          <button *transloco="let t" (click)="toggleBtn(8)" routerLink="devices">{{t("title.device1")}}</button>
+        </li>
+        <li class="niv-2" [ngClass]="{'active': isBtnActive === 9}">
+            <button *transloco="let t" (click)="toggleBtn(9)" routerLink="alarms">{{t("title.alarms")}}</button>
+        </li>
+        <li class="niv-2" [ngClass]="{'active': isBtnActive === 10}">
+            <button *transloco="let t" (click)="toggleBtn(10)" routerLink="setup">Import CSV devices</button>
+        </li>
+      </ul>
+    </li>
+    <li class="niv-1" [ngClass]="{'active': isBtnActive === 11}">
+      <button *transloco="let t" (click)="toggleBtn(11)" routerLink="app-pac">App PAC Sentinel ({{t("dealerships")}})</button>
+      <ul>
+        <li class="niv-2" [ngClass]="{'active': isBtnActive === 12}">
+            <button *transloco="let t" (click)="toggleBtn(12)" routerLink="user-app">{{t("roles.user")}} App</button>
+        </li>
+        <li class="niv-2" [ngClass]="{'active': isBtnActive === 13}">
+            <button *transloco="let t" (click)="toggleBtn(13)" routerLink="logs">Logs App</button>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>

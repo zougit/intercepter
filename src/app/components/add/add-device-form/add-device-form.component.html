@@ -1,0 +1,80 @@
+<form [formGroup]="addForm" (ngSubmit)="onClickSubmit()">
+  <div *ngIf="errorMsg" class="alert alert-danger">
+    {{ errorMsg }}
+  </div>
+
+  <div *ngFor="let t of tab" class="row">
+    <label>{{ "form." + t | transloco }} *</label>
+
+    <div
+      *ngIf="
+        (addForm.controls[t].dirty || addForm.controls[t].touched) &&
+        addForm.controls[t].invalid
+      "
+      class="alert alert-danger"
+    >
+      {{ "error.invalidField" | transloco }}
+    </div>
+
+    <input type="text" [formControlName]="t" />
+  </div>
+
+  <div *ngFor="let t of tabSelect" class="row">
+    <label>{{ "form." + t.name | transloco }} *</label>
+
+    <div
+      *ngIf="
+        (addForm.controls[t.name].dirty || addForm.controls[t.name].touched) &&
+        addForm.controls[t.name].invalid
+      "
+      class="alert alert-danger"
+    >
+      {{ "error.invalidField" | transloco }}
+    </div>
+
+    <select
+      [formControlName]="t.name"
+      #s
+      (change)="getZoneForCustomerId(s.value, t.name)"
+    >
+      <option value="" selected>Choisir</option>
+      <option *ngFor="let cell of t.key" [value]="cell.id ? cell.id : cell">
+        {{ cell.name ? cell.name : cell }}
+      </option>
+    </select>
+  </div>
+
+  <fieldset>
+    <legend>Voiture</legend>
+    <div *ngFor="let t of tabCar" class="row">
+      <label>{{ "form." + t | transloco }} </label>
+
+      <input type="text" [formControlName]="t" />
+    </div>
+    <div class="row">
+      <label>{{ "form.img" | transloco }}</label>
+
+      <input
+        type="file"
+        id="imgFile"
+        (change)="onFileSelected($event)"
+        class="btn input-file"
+        [formControlName]="'img'"
+      />
+    </div>
+  </fieldset>
+
+  <div class="row submit">
+    <button *transloco="let t" routerLink="/devices" class="btn cancel">
+      {{ t("btn.cancel") }}
+    </button>
+    <button
+      type="submit"
+      *transloco="let t"
+      [disabled]="addForm.invalid"
+      class="btn"
+    >
+      {{ t("btn.validate") }}
+    </button>
+  </div>
+</form>

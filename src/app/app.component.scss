@@ -1,0 +1,44 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    // flex: 1;
+    width: calc(100% - 250px);
+    height: 96vh;
+    .bg-top {
+        background-color: #343a40;
+        .top {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: flex-end;
+  
+        color: white;
+        gap: 20px;
+        min-height: 84px;
+      }
+    }
+    .content {
+      height: 100%;
+      background: #f1f1f1;
+      padding: 10px 10px 10px;
+      overflow-y: auto;
+      max-height: 100%;
+      display: block;
+    }
+  }
+  
+  .col {
+    display: flex;
+    flex-direction: column;
+  }
+
+  
+  div#footer {
+    background: rgba(168, 179, 191, 0.3490196078);
+    padding: 9px 0;
+    text-align: center;
+    color: #656565;
+    align-self: flex-end;
+    width: 100%;
+    max-height: 4vh;
+  }

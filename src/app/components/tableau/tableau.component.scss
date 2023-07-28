@@ -1,0 +1,172 @@
+@use "sass:map";
+@use "sass:string";
+@use "src/colors";
+
+table {
+    min-width: 100%;
+    max-width: max-content;
+    border-collapse: collapse;
+    border: 0;
+    margin-bottom: 20px;
+    &.devices {
+        margin-bottom: 20px;
+    }
+    &:not(.tablesorter) thead {
+        background: colors.$light-grey;
+        color: black;
+    }
+    &.labels {
+        thead tr {
+            height: auto;
+            min-height: unset;
+            th {
+                &.col-10:not(.name),
+                &.col-50 {
+                    text-align: center;
+                    padding: 2px 5px;
+                }
+            }
+        }
+        tbody tr td:not(:first-of-type) {
+            text-align: center;
+        }
+    }
+    th,
+    td {
+        min-width: 15%;
+        max-width: 45%;
+        width: max-content;
+        text-align: left;
+        padding: 4px;
+        &:nth-last-of-type(1):not([class*="col-"]),
+        &:nth-last-of-type(2):not([class*="col-"]) {
+            width: 5%;
+            text-align: center;
+            min-width: unset;
+            max-width: unset;
+        }
+        &.id {
+            width: 5%;
+        }
+        &.align_center {
+            text-align: center;
+        }
+        &.col-0 {
+            width: 0;
+            min-width: unset;
+        }
+        &.col-1 {
+            width: 1%;
+            max-width: 1%;
+            min-width: 1%;
+        }
+        &.col-5 {
+            width: 5%;
+            max-width: 5%;
+            min-width: 5%;
+        }
+        &.col-45 {
+            width: 45%;
+            min-width: 45%;
+            max-width: 45%;
+        }
+        $i : 0;
+        @while  $i < 80 {
+            $i : $i+10;
+            $p : "#{$i}%";
+            $pourcent : string.unquote($p);
+            @if $i > 40 {
+                &.col-#{$i}{
+                    width: auto;
+                    min-width: $pourcent;
+                    max-width: $pourcent;
+                }
+            } @else {
+                &.col-#{$i}{
+                    width: $pourcent;
+                    min-width: $pourcent;
+                    max-width: $pourcent;
+                }
+            }
+        }
+
+        &.no-pm {
+            margin: 0;
+        }
+        &.col-date {
+            /* background: #00000008; */
+            border-right: 1px solid #ffffff80;
+            border-left: 1px solid #ffffff80;
+        }
+        &.edit_txt,
+        &.edit,
+        &.delete {
+            cursor: pointer;
+            width: 5%;
+            max-width: 5%;
+            min-width: 5%;
+            span {
+                display: block;
+            }
+        }
+        &.edit_txt,
+        &.edit {
+            &:hover {
+                span {
+                    background: rgba(0, 128, 0, 0.1);
+                }
+            }
+            span {
+                color: colors.$green;
+                &:hover {
+                    color: black;
+                }
+            }
+        }
+        &.delete {
+            span {
+                color: map.get(colors.$colors, "red");
+                &:hover {
+                    color: black;
+                }
+            }
+            &:hover span {
+                background: rgba(255, 0, 0, 0.1);
+            }
+        }
+        ul {
+            margin: 0;
+            padding-left: 5px;
+            padding-right: 0;
+            width: fit-content;
+        }
+        &.devices td ul {
+            padding-left: 25px;
+        }
+        img {
+            padding: 0 5px;
+        }
+        svg {
+            font-size: 16px;
+            cursor: pointer;
+        }
+    }
+    tr {
+        border-bottom: 1px solid colors.$light-grey;
+        min-height: 30px;
+        height: 30px;
+    }
+}
+
+#orderBy th div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+}
+
+.check {
+    border: none;
+    background: transparent;
+}

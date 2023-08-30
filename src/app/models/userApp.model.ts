@@ -1,32 +1,29 @@
-export class User {
+export class UserApp {
   private _id!: string;
-  private _username: string;
+  private _name: string;
+  private _firstname: string;
+  private _login: string;
   private _password: string;
-  private _role: string;
-  private _status: string;
-  private _clientId: string;
   private _zoneId: string;
-  private _type: string;
-  private _region: string;
+  private _status: string;
+  private _role: string;
 
   constructor(
-    username: string,
+    login: string,
+    firstname: string,
+    name: string,
     password: string,
     role: string,
     status: string,
-    clientId: string,
     zoneId: string,
-    type: string,
-    region: string
   ) {
-    this._username = username;
+    this._login = login;
+    this._firstname = firstname;
+    this._name = name;
     this._password = password;
     this._role = role;
     this._status = status;
-    this._clientId = clientId;
     this._zoneId = zoneId;
-    this._type = type;
-    this._region = region;
   }
 
   /**
@@ -45,20 +42,52 @@ export class User {
     this._id = value;
   }
 
+    /**
+   * Setter login
+   * @param {string} value
+   */
+    public set login(value: string) {
+        this._login = value;
+      }
+    
+      /**
+       * Getter login
+       * @return {string}
+       */
+      public get login(): string {
+        return this._login;
+      }
+
   /**
-   * Getter username
+   * Getter login
    * @return {string}
    */
-  public get username(): string {
-    return this._username;
+  public get firstname(): string {
+    return this._firstname;
   }
 
   /**
-   * Setter username
+   * Setter login
    * @param {string} value
    */
-  public set username(value: string) {
-    this._username = value;
+  public set firstname(value: string) {
+    this._firstname = value;
+  }
+
+  /**
+   * Getter login
+   * @return {string}
+   */
+  public get name(): string {
+    return this._name;
+  }
+
+  /**
+   * Setter login
+   * @param {string} value
+   */
+  public set name(value: string) {
+    this._name = value;
   }
 
   /**
@@ -110,22 +139,6 @@ export class User {
   }
 
   /**
-   * Getter clientId
-   * @return {string}
-   */
-  public get clientId(): string {
-    return this._clientId;
-  }
-
-  /**
-   * Setter clientId
-   * @param {string} value
-   */
-  public set clientId(value: string) {
-    this._clientId = value;
-  }
-
-  /**
    * Getter zoneId
    * @return {string}
    */
@@ -141,48 +154,15 @@ export class User {
     this._zoneId = value;
   }
 
-  /**
-   * Getter type
-   * @return {string}
-   */
-  public get type(): string {
-    return this._type;
-  }
-
-  /**
-   * Setter type
-   * @param {string} value
-   */
-  public set type(value: string) {
-    this._type = value;
-  }
-
-  /**
-   * Getter region
-   * @return {string}
-   */
-  public get region(): string {
-    return this._region;
-  }
-
-  /**
-   * Setter region
-   * @param {string} value
-   */
-  public set region(value: string) {
-    this._region = value;
-  }
-
   toPlainObj() {
     return {
-      username: this._username,
+      login: this._login,
+      firstname: this._firstname,
+      name: this._name,
       password: this._password,
       role: this._role,
       status: this._status,
-      clientId: this._clientId,
       zoneId: this._zoneId,
-      type: this._type,
-      region: this._region,
     };
   }
 }

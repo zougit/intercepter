@@ -10,22 +10,7 @@
   color: white;
   min-width: 140px;
   width: 250px;
-  .title {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    .img {
-      height: 90vw;
-      padding: 0 5px;
-      margin: 0;
-      max-height: 3.5vw;
-    }
-  }
-  .text-title {
-    display: flex;
-    flex-direction: column;
-    font-size: 1.8em;
-  }
+  
   .nav {
     margin-left: 10px;
     margin-top: 3px;

@@ -1,19 +1,53 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, NgZone, PLATFORM_ID } from '@angular/core';
+import {
+  Component,
+  Inject,
+  NgZone,
+  OnInit,
+  AfterViewInit,
+  PLATFORM_ID,
+  OnDestroy,
+  AfterContentChecked,
+  AfterViewChecked,
+} from '@angular/core';
 
 import * as am5 from '@amcharts/amcharts5';
 import * as am5xy from '@amcharts/amcharts5/xy';
+import * as am5percent from '@amcharts/amcharts5/percent';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
+
+import { User } from 'src/app/models/user.model';
+import { Subscription } from 'rxjs';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-welcome-view',
   templateUrl: './welcome-view.component.html',
-  styleUrls: ['./welcome-view.component.scss']
+  styleUrls: ['./welcome-view.component.scss'],
 })
-export class WelcomeViewComponent {
-  private root!: am5.Root;
+export class WelcomeViewComponent
+  implements
+    OnInit,
+    AfterViewInit,
+    AfterViewChecked,
+    AfterContentChecked,
+    OnDestroy
+{
+  root!: am5.Root;
+  root2!: am5.Root;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private zone: NgZone) {}
+  users!: User[];
+  userSub!: Subscription;
+
+  admin!: number;
+  director!: number;
+  user!: number;
+
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private zone: NgZone,
+    public userService: UserService
+  ) {}
 
   // Run the function only in the browser
   browserOnly(f: () => void) {
@@ -24,87 +58,165 @@ export class WelcomeViewComponent {
     }
   }
 
+  ngOnInit(): void {
+    this.userSub = this.userService.items.subscribe(
+      (items) => (this.users = items)
+    );
+    this.userService.getAll();
+  }
+
+  ngAfterContentChecked(): void {
+    if (this.users) {
+      this.admin = this.users.filter((x) => {
+        return x.role == 'admin';
+      }).length;
+      this.director = this.users.filter((x) => {
+        return x.role == 'director';
+      }).length;
+      this.user = this.users.filter((x) => {
+        return x.role == 'user';
+      }).length;
+    }
+  }
+
   ngAfterViewInit() {
     // Chart code goes in here
     this.browserOnly(() => {
-      let root = am5.Root.new("chartdiv");
-
+      let root = am5.Root.new('chartdiv');
       root.setThemes([am5themes_Animated.new(root)]);
-
       let chart = root.container.children.push(
         am5xy.XYChart.new(root, {
           panY: false,
-          layout: root.verticalLayout
+          layout: root.verticalLayout,
         })
       );
-
       // Define data
       let data = [
         {
-          category: "Research",
-          value1: 1000,
-          value2: 588
+          category: 'Zone 1',
+          directeur: 1,
+          employe: 0,
         },
         {
-          category: "Marketing",
-          value1: 1200,
-          value2: 1800
+          category: 'Zone 2',
+          directeur: 2,
+          employe: 2,
         },
-        {
-          category: "Sales",
-          value1: 850,
-          value2: 1230
-        }
       ];
-
       // Create Y-axis
       let yAxis = chart.yAxes.push(
         am5xy.ValueAxis.new(root, {
-          renderer: am5xy.AxisRendererY.new(root, {})
+          min: 0,
+          max: 100,
+          calculateTotals: true,
+          numberFormat: "#'%'",
+          renderer: am5xy.AxisRendererY.new(root, {}),
         })
       );
-
       // Create X-Axis
       let xAxis = chart.xAxes.push(
         am5xy.CategoryAxis.new(root, {
+          maxDeviation: 0.1,
           renderer: am5xy.AxisRendererX.new(root, {}),
-          categoryField: "category"
+          categoryField: 'category',
         })
       );
       xAxis.data.setAll(data);
-
       // Create series
-      let series1 = chart.series.push(
-        am5xy.ColumnSeries.new(root, {
-          name: "Series",
-          xAxis: xAxis,
-          yAxis: yAxis,
-          valueYField: "value1",
-          categoryXField: "category"
-        })
-      );
-      series1.data.setAll(data);
-
-      let series2 = chart.series.push(
-        am5xy.ColumnSeries.new(root, {
-          name: "Series",
-          xAxis: xAxis,
-          yAxis: yAxis,
-          valueYField: "value2",
-          categoryXField: "category"
-        })
-      );
-      series2.data.setAll(data);
-
+      function createSeries(name: string, field: string) {
+        var series = chart.series.push(
+          am5xy.ColumnSeries.new(root, {
+            name: name,
+            xAxis: xAxis,
+            yAxis: yAxis,
+            valueYField: field,
+            valueYShow: 'valueYTotalPercent',
+            categoryXField: 'category',
+            stacked: true,
+          })
+        );
+        series.data.setAll(data);
+        series.columns.template.setAll({
+          tooltipText: '{name}, {categoryX} : {valueY}',
+          width: am5.percent(90),
+          tooltipY: 10,
+        });
+        series.data.setAll(data);
+        series.appear();
+        series.bullets.push(function () {
+          return am5.Bullet.new(root, {
+            locationY: 0,
+            sprite: am5.Label.new(root, {
+              // text: "{valueY}",
+              fill: root.interfaceColors.get('alternativeText'),
+              centerY: 0,
+              centerX: am5.p50,
+              populateText: true,
+            }),
+          });
+        });
+      }
+      createSeries('Directeur', 'directeur');
+      createSeries('Employé', 'employe');
       // Add legend
       let legend = chart.children.push(am5.Legend.new(root, {}));
       legend.data.setAll(chart.series.values);
-
-      // Add cursor
-      chart.set("cursor", am5xy.XYCursor.new(root, {}));
-
       this.root = root;
     });
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.users) {
+      this.browserOnly(() => {
+        if (this.root2) {
+          this.root2.dispose();
+        }
+      });
+
+      this.browserOnly(() => {
+        var root = am5.Root.new('chartdiv-users');
+
+        root.setThemes([am5themes_Animated.new(root)]);
+
+        var chart = root.container.children.push(
+          am5percent.PieChart.new(root, {
+            endAngle: 270,
+          })
+        );
+
+        // Define data
+        var data = [
+          {
+            category: 'Admin',
+            value: this.admin,
+          },
+          {
+            category: 'Directeur',
+            value: this.director,
+          },
+          {
+            category: 'User',
+            value: this.user,
+          },
+        ];
+
+        // Create series
+        var series = chart.series.push(
+          am5percent.PieSeries.new(root, {
+            valueField: 'value',
+            categoryField: 'category',
+            endAngle: 270,
+          })
+        );
+        series.states.create('hidden', {
+          endAngle: -90,
+        });
+        series.data.setAll(data);
+        series.appear(1000, 100);
+
+        this.root2 = root;
+      });
+    }
   }
 
   ngOnDestroy() {
@@ -112,6 +224,11 @@ export class WelcomeViewComponent {
     this.browserOnly(() => {
       if (this.root) {
         this.root.dispose();
+      }
+    });
+    this.browserOnly(() => {
+      if (this.root2) {
+        this.root2.dispose();
       }
     });
   }

@@ -1,1 +1,19 @@
-<p>user-app-view works!</p>
+<div class="row align-center">
+    <h2 *transloco="let t">{{ "title.users" | transloco }} App</h2>
+    <button class="btn-blue left" *transloco="let t" routerLink="/userApp/add">
+      {{ t("title.pageAdd") }}
+    </button>
+  </div>
+  
+  <div class="row align-center filtre">
+    <h3>Filters:</h3>
+    <div class="select row">
+        <label for="zones">Zone </label>
+        <select name="zones" #sz (change)="getByZone(sz.value)">
+            <option value=""></option>
+            <option *ngFor="let zone of zones" [value]="zone.id"> {{zone.name}} </option>
+        </select>
+    </div>
+  </div>
+  
+  <app-tableau [thead]="thead" [content]="usersApp" page="userApp" [service]="''" />

@@ -1,44 +1,83 @@
 .main {
+  display: flex;
+  flex-direction: row;
+  // flex: 1;
+  width: 100%;
+  height: 86vh;
+
+  .content {
+    display: block;
+    height: 100%;
+    width: 100%;
+    background: #f1f1f1;
+    padding: 10px 10px 10px;
+    overflow-y: auto;
+    max-height: 100%;
+    .connect {
+      max-width: 70%;
+      width: 100%;
+      margin: 0 auto;
+    }
+  }
+  .content-log {
     display: flex;
-    flex-direction: column;
-    // flex: 1;
-    width: calc(100% - 250px);
-    height: 96vh;
-    .bg-top {
-        background-color: #343a40;
-        .top {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: flex-end;
-  
-        color: white;
-        gap: 20px;
-        min-height: 84px;
+    justify-content: center;
+    width: 100%;
+    background: #f1f1f1;
+    padding: 10px 10px 10px;
+    overflow-y: auto;
+  }
+}
+
+.bg-top {
+  background-color: #343a40;
+  height: 10vh;
+  .top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    color: white;
+    gap: 20px;
+    min-height: 84px;
+
+    .title {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      .img {
+        height: 90vw;
+        padding: 0 5px;
+        margin: 0;
+        max-height: 3.5vw;
       }
     }
-    .content {
-      height: 100%;
-      background: #f1f1f1;
-      padding: 10px 10px 10px;
-      overflow-y: auto;
-      max-height: 100%;
-      display: block;
+    .text-title {
+      display: flex;
+      flex-direction: column;
+      font-size: 1.8em;
+    }
+    .right-top {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 20px;
+      min-height: 84px;
     }
   }
-  
-  .col {
-    display: flex;
-    flex-direction: column;
-  }
+}
 
-  
-  div#footer {
-    background: rgba(168, 179, 191, 0.3490196078);
-    padding: 9px 0;
-    text-align: center;
-    color: #656565;
-    align-self: flex-end;
-    width: 100%;
-    max-height: 4vh;
-  }
+.col {
+  display: flex;
+  flex-direction: column;
+}
+
+div#footer {
+  background: rgba(168, 179, 191, 0.3490196078);
+  padding: 9px 0;
+  text-align: center;
+  color: #656565;
+  width: 100%;
+  max-height: 4vh;
+}

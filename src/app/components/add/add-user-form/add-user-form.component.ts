@@ -118,18 +118,18 @@ export class AddUserFormComponent {
         ? this.addForm.controls['client'].value.toString()
         : '';
 
-    console.log('client ', clientId);
+    // console.log('client ', clientId);
 
     let zoneId =
       this.addForm.controls['zone'].value[0] != ''
         ? this.addForm.controls['zone'].value.toString()
         : '';
 
-    console.log('zone ', zoneId);
+    // console.log('zone ', zoneId);
 
     let typeC = this.customers.find((x) => x.id == clientId)?.type ?? '';
 
-    console.log('type ', typeC);
+    // console.log('type ', typeC);
 
     const newUser = new User(
       this.addForm.controls['username'].value,

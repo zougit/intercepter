@@ -1,0 +1,44 @@
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .round {
+    border-radius: 40px;
+    max-width: 120px;
+    overflow: hidden;
+
+    .logo-app {
+      max-width: 120px;
+    }
+  }
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    .link {
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      a {
+        &:link,
+        &:visited,
+        &:hover,
+        &:active {
+          color: black;
+          text-decoration: none;
+        }
+      }
+    }
+    .logo {
+      max-height: 80px;
+    }
+    .btn {
+      border-radius: 0.375rem;
+      border: solid 1px black;
+      background: white;
+      padding: 5px 15px;
+      margin-left: 20px;
+    }
+  }
+}

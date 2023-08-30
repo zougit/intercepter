@@ -1,0 +1,49 @@
+<div class="center">
+  <h2>Connexion</h2>
+  <fa-icon [icon]="usersIcon" class="fa-10x"></fa-icon>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmitLoginForm()">
+    <div *ngIf="errorMsg" class="alert alert-danger">
+      {{ errorMsg }}
+    </div>
+
+    <div class="center-line">
+      <label for=""> {{ "tab.name" | transloco }} </label>
+
+      <div
+        *ngIf="
+          (loginForm.controls['username'].dirty ||
+            loginForm.controls['username'].touched) &&
+          loginForm.controls['username'].invalid
+        "
+        class="alert alert-danger"
+      >
+        le username est obligatoire
+      </div>
+
+      <input type="text" placeholder="nom" formControlName="username" />
+    </div>
+
+    <div class="center-line">
+      <label for="">Mot de passe</label>
+      <div
+        *ngIf="
+          (loginForm.controls['password'].dirty ||
+            loginForm.controls['password'].touched) &&
+          loginForm.controls['password'].invalid
+        "
+        class="alert alert-danger"
+      >
+        le mot de passe est obligatoire
+      </div>
+
+      <input
+        type="password"
+        placeholder="Mot de passe"
+        formControlName="password"
+      />
+    </div>
+    <div class="center-line">
+      <button class="btn" [disabled]="loginForm.invalid">Envoyer</button>
+    </div>
+  </form>
+</div>

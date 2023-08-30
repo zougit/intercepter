@@ -123,6 +123,7 @@ h4 {
   &.left {
     margin-left: auto;
   }
+
 }
 
 .btn.input-file {
@@ -206,6 +207,13 @@ form {
     }
     &:hover {
       background: #0094ff66;
+    }
+    &:disabled {
+      color: colors.$black;
+      &:hover {
+        color: colors.$white;
+        background: #0094ff66;
+      }
     }
   }
   .row.list {

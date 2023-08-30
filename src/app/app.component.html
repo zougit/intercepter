@@ -1,29 +1,47 @@
 <div class="col">
-  <div class="row">
-    <app-menu />
-    <div class="main">
-      <div class="bg-top">
-        <div class="top">
-          <div *transloco="let t"><b>username</b> | {{ t("roles.admin") }}</div>
-    
-          <select #select (click)="changeLanguage(select.value)">
-            <option
-              *ngFor="let language of languagesList; index as i"
-              [value]="language.code"
-            >
-              {{ language.shorthand }}
-            </option>
-          </select>
-    
-          <button class="btn btn-blue" *transloco="let t">{{ t("deconnexion") }}</button>
-        </div>
+  <div class="bg-top">
+    <div class="top">
+      <div class="title">
+        <img class="img" src="../assets/img/intercepterlogosimple.png" alt="" />
+        <h1 class="text-title">
+          Intercepter
+          <small style="font-size: 16px">BackOffice</small>
+        </h1>
       </div>
-    
-      <div class="content">
-        <router-outlet></router-outlet>
+
+      <div class="right-top">
+        <div *ngIf="isLogged">
+          <b>username</b> | {{ "roles.admin" | transloco }}
+        </div>
+
+        <select #select (click)="changeLanguage(select.value)">
+          <option
+            *ngFor="let language of languagesList; index as i"
+            [value]="language.code"
+          >
+            {{ language.shorthand }}
+          </option>
+        </select>
+
+        <button class="btn btn-blue" *ngIf="isLogged" (click)="logout()">
+          {{ "deconnexion" | transloco }}
+        </button>
       </div>
     </div>
   </div>
-  <div id="footer">&copy;{{currentTime | date:'Y'}} GigaConcept - v 2.0</div>
-  
+
+  <div class="main">
+    <app-menu *ngIf="isLogged" />
+    <!-- <app-menu /> -->
+
+    <div class="content">
+      <div [ngClass]="isLogged ? '' : 'connect'">
+        <router-outlet ></router-outlet>
+      </div>
+    </div>
+  </div>
+
+  <div id="footer">
+    &copy;{{ currentTime | date : "Y" }} GigaConcept - v 2.0
+  </div>
 </div>

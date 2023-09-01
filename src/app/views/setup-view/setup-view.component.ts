@@ -213,11 +213,12 @@ export class SetupViewComponent {
                 deveui: data[0],
                 appk: data[1],
                 name: data[2],
+                zoneOldId: this.devices.find((d) => d.deveui == data[0])?.zone,
               });
             }
           }
         }
-        console.log(this.tabMaj);
+        // console.log(this.tabMaj);
 
         result.data = result.data.filter(
           (item: any) => !delData.includes(item)
@@ -247,24 +248,24 @@ export class SetupViewComponent {
       );
     }
     // console.log(newDevices);
-
     if (newDevices.length != 0) {
       this.deviceService
         .addMany(newDevices as Device[])
         .then(() => {
-          this.zoneService
-            .getById(newDevices[0].zone)
-            .then((zone) => {
-              this.zoneService
-                .edit({
-                  id: newDevices[0].zone,
-                  nbDevices: zone.nbDevices + newDevices.length,
-                })
-                .then()
-                .catch((errMsg) => (this.errorMsg = errMsg));
-              console.log('Success');
-            })
-            .catch((errMsg) => (this.errorMsg = errMsg));
+          // this.zoneService
+          //   .getById(newDevices[0].zone)
+          //   .then((zone) => {
+          //     this.zoneService
+          //       .edit({
+          //         id: newDevices[0].zone,
+          //         nbDevices: zone.nbDevices + newDevices.length,
+          //       })
+          //       .then()
+          //       .catch((errMsg) => (this.errorMsg = errMsg));
+          //     console.log('Success');
+          //   })
+          //   .catch((errMsg) => (this.errorMsg = errMsg));
+          console.log('add success');
         })
         .catch((errMsg) => (this.errorMsg = errMsg));
     }
@@ -277,9 +278,29 @@ export class SetupViewComponent {
           type: this.addForm.value.type,
         });
       }
+      let tabMajCopie = this.tabMaj.map((objet) => {
+        const { zoneOldId, ...nouvelObjet } = objet;
+        // console.log(nouvelObjet);
+        
+        return nouvelObjet;
+      });
+      // console.log(tabMajCopie);
       this.deviceService
-        .editMany(this.tabMaj)
+        .editMany(tabMajCopie)
         .then(() => {
+          // this.zoneService
+          //   .getById(this.tabMaj[0].zone)
+          //   .then((zone) => {
+          //     this.zoneService
+          //       .edit({
+          //         id: this.tabMaj[0].zone,
+          //         nbDevices: zone.nbDevices + this.tabMaj.length,
+          //       })
+          //       .then()
+          //       .catch((errMsg) => (this.errorMsg = errMsg));
+          //     console.log('Success');
+          //   })
+          //   .catch((errMsg) => (this.errorMsg = errMsg));
           console.log('edit success');
         })
         .catch((errMsg) => (this.errorMsg = errMsg));

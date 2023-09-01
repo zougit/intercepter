@@ -75,6 +75,10 @@ export class DeviceViewComponent {
     } 
   }
 
+  canDelete(item: any) {
+    return true;
+  }
+
   addBox(box: any) {
     this.isChecked = true;
     this.boxChecked = box;

@@ -11,14 +11,19 @@
 
       <div class="right-top">
         <div *ngIf="isLogged">
-          <b>username</b> | {{ "roles.admin" | transloco }}
+          <b> {{ user && user.username ? user.username : "username" }} </b> |
+          {{ user && user.role ? ("roles." + user.role | transloco) : "role" }}
         </div>
 
-        <select #select (click)="changeLanguage(select.value)">
+        <select #select (change)="changeLanguage(select.value)">
+          <option [value]="this.userLang.code">
+            {{ this.userLang.shorthand }}
+          </option>
           <option
             *ngFor="let language of languagesList; index as i"
             [value]="language.code"
           >
+            <!-- <img src="{{language.imgUrl}}" alt=""> -->
             {{ language.shorthand }}
           </option>
         </select>
@@ -36,7 +41,7 @@
 
     <div class="content">
       <div [ngClass]="isLogged ? '' : 'connect'">
-        <router-outlet ></router-outlet>
+        <router-outlet></router-outlet>
       </div>
     </div>
   </div>

@@ -85,7 +85,9 @@
         (click)="onClickDelete(content[i + itemsPerPage * (p - 1)].id)"
         [icon]="trash"
         class="red fa-lg"
+        *ngIf="canDelete(content[i + itemsPerPage * (p - 1)],function)"
       ></fa-icon>
+      <span *ngIf="!canDelete(content[i + itemsPerPage * (p - 1)],function)" >_</span>
     </td>
   </tr>
 </table>

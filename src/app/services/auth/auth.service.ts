@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
+import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 import { Firestore } from '@angular/fire/firestore';
 import * as FireStore from 'firebase/firestore';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private _isLoggedIn = new BehaviorSubject<boolean>(true);
+
   constructor(private afa: Auth, private afs: Firestore) {}
 
   login(userLog: any) {
@@ -27,16 +30,16 @@ export class AuthService {
         user.id = doc.id;
         return user;
       });
-      console.log('user :', user.id, ' :', user.username);
 
       if (user) {
         const email = user.username + '@intercepter.com';
         if (user.password == userLog.password) {
           signInWithEmailAndPassword(this.afa, email, user.password)
-            .then((userCredential) => {
-              const user = userCredential.user;
-              console.log('user connected');
-              res;
+            .then(() => {
+              localStorage.setItem('user', JSON.stringify(user));
+              localStorage.removeItem('isBtnActive');
+              this._isLoggedIn.next(true);
+              res();
             })
             .catch((err) => {
               if (err.code == 'auth/user-not-found') {
@@ -44,21 +47,30 @@ export class AuthService {
                   this.afa,
                   email,
                   user.password
-                ).then((userCredential) => {
-                  const user = userCredential.user;
-                  console.log('user created');
-                  res;
+                ).then(() => {
+                  localStorage.setItem('user', JSON.stringify(user));
+                  localStorage.removeItem('isBtnActive');
+                  this._isLoggedIn.next(true);
+                  res();
                 });
               }
             });
         } else {
           alert('mauvais mdp');
-          rej;
+          rej();
         }
       } else {
         alert('mauvais username');
-        rej;
+        rej();
       }
     });
+  }
+
+  public isLoggedIn() {
+    return this._isLoggedIn.asObservable();
+  }
+
+  public logout() {
+    this._isLoggedIn.next(false);
   }
 }

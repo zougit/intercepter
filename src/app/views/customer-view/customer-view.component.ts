@@ -49,6 +49,14 @@ export class CustomerViewComponent {
       }
     }
   }
+//FIXME - faire la conditon des zones pour candelete
+  canDelete(item: Customer) {
+    if(item) {
+      // console.log(item);
+      return false;
+    }
+    return true;
+  }
 
   getZoneByCustomerId(id: string) {
     let map = this.zones.map((s) => {

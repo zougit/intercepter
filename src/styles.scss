@@ -53,6 +53,7 @@ h4 {
 .row {
   display: flex;
   flex-direction: row;
+
   &.filtre {
     display: flex;
     flex-direction: row;
@@ -123,7 +124,6 @@ h4 {
   &.left {
     margin-left: auto;
   }
-
 }
 
 .btn.input-file {
@@ -152,8 +152,8 @@ form {
       min-width: calc(93% / 4);
     }
   }
-  .btn,
-  button {
+  .btn :not(.validate),
+  button :not(.validate) {
     width: 40%;
   }
   input {
@@ -428,7 +428,7 @@ form {
       background: #0094ff66;
     }
   }
-  select:disabled,
+  
   fieldset {
     border: 1px solid #0094ff;
     padding: 10px;

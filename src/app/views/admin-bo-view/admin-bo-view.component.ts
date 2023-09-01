@@ -63,6 +63,15 @@ export class AdminBOViewComponent {
     }
   }
 
+  canDelete(item: User) {
+    if(item.role == 'admin') {
+      // console.log(item);
+      return false;
+    }
+    return true;
+  }
+
+
   getZoneById(ids: string[]) {
     let zones: string[] = [];
 

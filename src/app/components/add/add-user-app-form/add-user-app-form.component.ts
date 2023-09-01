@@ -48,12 +48,15 @@ export class AddUserAppFormComponent {
   }
 
   ngAfterContentChecked() {
-    this.tabSelect = [
-      { key: this.customers, name: 'client' },
-      { key: this.zonecustomerId, name: 'zone' },
-      { key: ['yes', 'no'], name: 'active' },
-      { key: this.roles, name: 'role' },
-    ];
+    if (this.customers && this.zones) {
+      this.customers = this.customers.filter((s) => s.type === '1');
+      this.tabSelect = [
+        { key: this.customers, name: 'client' },
+        { key: this.zonecustomerId, name: 'zone' },
+        { key: ['yes', 'no'], name: 'active' },
+        { key: this.roles, name: 'role' },
+      ];
+    }
   }
 
   _initForm() {
@@ -87,7 +90,6 @@ export class AddUserAppFormComponent {
   }
 
   onClickSubmit() {
-
     const newUserApp = new UserApp(
       this.addForm.controls['login'].value,
       this.addForm.controls['name'].value,

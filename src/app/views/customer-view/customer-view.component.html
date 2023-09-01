@@ -1,6 +1,15 @@
 <div class="row align-center">
-    <h2 *transloco="let t"> {{ t("title.customers") }} </h2>
-    <button class="btn-blue left" *transloco="let t"  routerLink="/customers/add"> {{ t("title.pageAdd") }} </button>
+  <h2 *transloco="let t">{{ t("title.customers") }}</h2>
+  <button class="btn-blue left" *transloco="let t" routerLink="/customers/add">
+    {{ t("title.pageAdd") }}
+  </button>
 </div>
 
-<app-tableau *ngIf="customers && zones" [thead]="thead" [content]="customers" page="customers" [service]="customerService"/>
+<app-tableau
+  *ngIf="customers && zones"
+  [thead]="thead"
+  [content]="customers"
+  page="customers"
+  [function]="canDelete"
+  [service]="customerService"
+/>

@@ -1,4 +1,9 @@
-import { AfterContentChecked, Component, OnInit } from '@angular/core';
+import {
+  AfterContentChecked,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Customer } from 'src/app/models/customer.model';
 import { UserApp } from 'src/app/models/userApp.model';
@@ -12,7 +17,9 @@ import { ZoneService } from 'src/app/services/zone/zone.service';
   templateUrl: './user-app-view.component.html',
   styleUrls: ['./user-app-view.component.scss'],
 })
-export class UserAppViewComponent implements OnInit, AfterContentChecked {
+export class UserAppViewComponent
+  implements OnInit, OnDestroy, AfterContentChecked
+{
   thead = [
     { name: 'name', size: '10' },
     { name: 'firstname', size: '10' },
@@ -27,6 +34,8 @@ export class UserAppViewComponent implements OnInit, AfterContentChecked {
   customers!: Customer[];
   customerSub!: Subscription;
 
+  customerZone!: Customer[];
+
   zones!: Zone[];
   zoneSub!: Subscription;
 
@@ -36,7 +45,7 @@ export class UserAppViewComponent implements OnInit, AfterContentChecked {
   constructor(
     private zoneService: ZoneService,
     private customerService: CustomerService,
-    private userAppService: UserAppService
+    public userAppService: UserAppService
   ) {}
 
   ngOnInit(): void {
@@ -47,14 +56,26 @@ export class UserAppViewComponent implements OnInit, AfterContentChecked {
   }
 
   ngAfterContentChecked() {
-    if (this.usersApp) {
+    if (this.usersApp && this.customers && this.zones) {
       for (let u of this.usersApp) {
         let zone = this.getZoneById(u.zoneId);
-        Object.assign(u, { zone: zone!.name });
-        Object.assign(u, { customer: this.getCustomerById(zone!.customerId) });
+        if (zone) {
+          Object.assign(u, { zone: zone.name });
+          Object.assign(u, { customer: this.getCustomerById(zone!.customerId) });
+        }
       }
+      this.zones = this.getZonebyType();
     }
   }
+
+  canDelete(item: any) {
+    if(item) {
+      console.log(item);
+      return false;
+    }
+    return true;
+  }
+
 
   _initSubs() {
     this.zoneSub = this.zoneService.items.subscribe(
@@ -66,6 +87,21 @@ export class UserAppViewComponent implements OnInit, AfterContentChecked {
     this.customerSub = this.customerService.items.subscribe(
       (items) => (this.customers = items)
     );
+  }
+
+  getZonebyType() {
+    this.customerZone = this.customers.filter((s) => s.type === '1');
+    let zonescustomer = [];
+
+    for (const c of this.customerZone) {
+      for (const z of this.zones) {
+        if (z.customerId === c.id) {
+          zonescustomer.push(z);
+        }
+      }
+    }
+
+    return zonescustomer;
   }
 
   getCustomerById(id: string) {
@@ -90,5 +126,11 @@ export class UserAppViewComponent implements OnInit, AfterContentChecked {
         .filter((d) => d.zoneId === id)
         .forEach((val) => this.usersApp.push(Object.assign({}, val)));
     }
+  }
+
+  ngOnDestroy(): void {
+    this.customerSub.unsubscribe();
+    this.zoneSub.unsubscribe();
+    this.usersAppSub.unsubscribe();
   }
 }

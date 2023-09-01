@@ -1,1 +1,46 @@
-<p>my-account-view works!</p>
+<h2>{{ "title.myAccount" | transloco }}</h2>
+
+<form [formGroup]="userForm" (ngSubmit)="onClickSubmit()">
+  <div *ngIf="errorMsg" class="alert alert-danger">
+    {{ errorMsg }}
+  </div>
+
+  <div class="row">
+    <label>{{ "form.name" | transloco }} *</label>
+
+    <div
+      *ngIf="
+        (userForm.controls['name'].dirty ||
+          userForm.controls['name'].touched) &&
+        userForm.controls['name'].invalid
+      "
+      class="alert alert-danger"
+    >
+      {{ "error.invalidField" | transloco }}
+    </div>
+
+    <input [type]="'text'" [formControlName]="'name'" />
+  </div>
+
+  <div *ngFor="let t of tabSelect" class="row">
+    <label>{{ "form." + t.name | transloco }} *</label>
+
+    <div
+      *ngIf="
+        (userForm.controls[t.name].dirty ||
+          userForm.controls[t.name].touched) &&
+        userForm.controls[t.name].invalid
+      "
+      class="alert alert-danger"
+    >
+      {{ "error.invalidField" | transloco }}
+    </div>
+
+    <select [formControlName]="t.name" [attr.disabled]="true">
+      <option value="" selected></option>
+      <option *ngFor="let cell of t.key" [value]="cell">
+        {{ cell }}
+      </option>
+    </select>
+  </div>
+</form>

@@ -18,6 +18,7 @@ export class TableauComponent {
   @Input() content!: any;
   @Input() page!: string;
   @Input() service!: any;
+  @Input() function!: any;
   @Output() boxCheckEmitter = new EventEmitter<any[]>();
   boxCheck: any[] = [];
 
@@ -135,6 +136,10 @@ export class TableauComponent {
     } else {
       return false;
     }
+  }
+
+  canDelete(item: any, func: any) {
+    return func(item);
   }
 
   openDetails(id: string) {

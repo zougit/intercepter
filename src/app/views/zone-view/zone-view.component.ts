@@ -6,6 +6,8 @@ import { Zone } from 'src/app/models/zone.model';
 import { CustomerService } from 'src/app/services/customer/customer.service';
 import { ZoneService } from 'src/app/services/zone/zone.service';
 import { globals } from 'src/globals';
+import { Device } from 'src/app/models/device.model';
+import { DeviceService } from 'src/app/services/device/device.service';
 
 @Component({
   selector: 'app-zone-view',
@@ -34,6 +36,9 @@ export class ZoneViewComponent {
     { name: '', size: '10' },
   ];
 
+  devices!: Device[];
+  deviceSub!: Subscription;
+
   customers!: Customer[];
   customerZone!: Customer[];
   customerSub!: Subscription;
@@ -49,7 +54,8 @@ export class ZoneViewComponent {
   constructor(
     private location: Location,
     private customerService: CustomerService,
-    public zoneService: ZoneService
+    public zoneService: ZoneService,
+    public deviceService: DeviceService
   ) {}
 
   ngOnInit() {
@@ -58,20 +64,38 @@ export class ZoneViewComponent {
     this._initSubs();
     this.customerService.getAll();
     this.zoneService.getAll();
+    this.deviceService.getAll();
+
     this.isSorting = false;
   }
 
   ngAfterContentChecked() {
-    if (this.customers && this.zones) {
+    if (this.customers && this.zones && this.devices) {
       for (let z of this.zones) {
         Object.assign(z, { customer: this.getCustomerById(z.customerId) });
+        z.nbDevices = this.getNbDevice(z.id);
       }
       if (!this.isSorting) {
-        let type = this.types.find((t) => t.name === this.path)!.id;        
+        let type = this.types.find((t) => t.name === this.path)!.id;
         this.zoneType = this.getZonebyType(type);
       }
       // console.log(this.zoneType);
     }
+  }
+  //FIXME - finir le candelete avec la conditon du user
+  canDelete(item: Zone) {
+    if (item.nbDevices) {
+      // console.log(item);
+      return false;
+    }
+    return true;
+  }
+
+  getNbDevice(zoneId: string) {
+    if (zoneId) {
+      return this.devices.filter((x) => x.zone == zoneId).length
+    }
+    return 0;
   }
 
   getByCustomer(id: string) {
@@ -99,7 +123,9 @@ export class ZoneViewComponent {
   }
 
   getZonebyType(type: number) {
-    this.customerZone = this.customers.filter((s) => s.type === type.toString());    
+    this.customerZone = this.customers.filter(
+      (s) => s.type === type.toString()
+    );
     let zonescustomer = [];
 
     for (const c of this.customerZone) {
@@ -119,6 +145,9 @@ export class ZoneViewComponent {
     );
     this.customerSub = this.customerService.items.subscribe(
       (items) => (this.customers = items)
+    );
+    this.deviceSub = this.deviceService.items.subscribe(
+      (items) => (this.devices = items)
     );
   }
 

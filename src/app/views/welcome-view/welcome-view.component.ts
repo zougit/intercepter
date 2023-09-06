@@ -48,14 +48,17 @@ export class WelcomeViewComponent
   director!: number;
   user!: number;
 
-  occurencesArray!: any[]
+  occurencesArray!: any[];
+
+  cpt = 0;
+  cpt2 = 0;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private zone: NgZone,
     private userService: UserService,
     private userAppService: UserAppService,
-    private zoneService: ZoneService,
+    private zoneService: ZoneService
   ) {}
 
   // Run the function only in the browser
@@ -103,7 +106,7 @@ export class WelcomeViewComponent
       const occurences = this.usersApp.reduce((a, user) => {
         const zoneId = user.zoneId;
         const role = user.role;
-        let acc = a as any
+        let acc = a as any;
         if (!acc[zoneId]) {
           acc[zoneId] = {};
         }
@@ -122,20 +125,20 @@ export class WelcomeViewComponent
 
       for (const zoneId in occurences) {
         const roleCounts = roles.reduce((a, role) => {
-          let acc = a as any
+          let acc = a as any;
           acc[role] = (occurences as any)[zoneId][role] || 0;
           return acc;
         }, {});
 
         occurencesArray.push({
-          category : this.getZoneById(zoneId),
-          director : (roleCounts as any)['director'],
-          employe : (roleCounts as any)['user'],
+          category: this.getZoneById(zoneId),
+          director: (roleCounts as any)['director'],
+          employe: (roleCounts as any)['user'],
         });
       }
 
       // console.log(occurencesArray);
-      this.occurencesArray = occurencesArray
+      this.occurencesArray = occurencesArray;
     }
   }
 
@@ -153,136 +156,142 @@ export class WelcomeViewComponent
 
   ngAfterViewChecked(): void {
     if (this.usersApp && this.zones) {
-      this.browserOnly(() => {
-        if (this.root) {
-          this.root.dispose();
-        }
-      });
+      if (this.cpt == 0) {
+        this.browserOnly(() => {
+          if (this.root) {
+            this.root.dispose();
+          }
+        });
 
-      this.browserOnly(() => {
-        let root = am5.Root.new('chartdiv');
-        root.setThemes([am5themes_Animated.new(root)]);
-        let chart = root.container.children.push(
-          am5xy.XYChart.new(root, {
-            panY: false,
-            layout: root.verticalLayout,
-          })
-        );
-        // Define data
-        let data = this.occurencesArray
-
-        // Create Y-axis
-        let yAxis = chart.yAxes.push(
-          am5xy.ValueAxis.new(root, {
-            min: 0,
-            max: 100,
-            calculateTotals: true,
-            numberFormat: "#'%'",
-            renderer: am5xy.AxisRendererY.new(root, {}),
-          })
-        );
-        // Create X-Axis
-        let xAxis = chart.xAxes.push(
-          am5xy.CategoryAxis.new(root, {
-            maxDeviation: 0.1,
-            renderer: am5xy.AxisRendererX.new(root, {}),
-            categoryField: 'category',
-          })
-        );
-        xAxis.data.setAll(data);
-        // Create series
-        function createSeries(name: string, field: string) {
-          var series = chart.series.push(
-            am5xy.ColumnSeries.new(root, {
-              name: name,
-              xAxis: xAxis,
-              yAxis: yAxis,
-              valueYField: field,
-              valueYShow: 'valueYTotalPercent',
-              categoryXField: 'category',
-              stacked: true,
+        this.browserOnly(() => {
+          let root = am5.Root.new('chartdiv');
+          root.setThemes([am5themes_Animated.new(root)]);
+          let chart = root.container.children.push(
+            am5xy.XYChart.new(root, {
+              panY: false,
+              layout: root.verticalLayout,
             })
           );
-          series.data.setAll(data);
-          series.columns.template.setAll({
-            tooltipText: '{name}, {categoryX} : {valueY}',
-            width: am5.percent(90),
-            tooltipY: 10,
-          });
-          series.data.setAll(data);
-          series.appear();
-          series.bullets.push(function () {
-            return am5.Bullet.new(root, {
-              locationY: 0,
-              sprite: am5.Label.new(root, {
-                // text: "{valueY}",
-                fill: root.interfaceColors.get('alternativeText'),
-                centerY: 0,
-                centerX: am5.p50,
-                populateText: true,
-              }),
+          // Define data
+          let data = this.occurencesArray;
+
+          // Create Y-axis
+          let yAxis = chart.yAxes.push(
+            am5xy.ValueAxis.new(root, {
+              min: 0,
+              max: 100,
+              calculateTotals: true,
+              numberFormat: "#'%'",
+              renderer: am5xy.AxisRendererY.new(root, {}),
+            })
+          );
+          // Create X-Axis
+          let xAxis = chart.xAxes.push(
+            am5xy.CategoryAxis.new(root, {
+              maxDeviation: 0.1,
+              renderer: am5xy.AxisRendererX.new(root, {}),
+              categoryField: 'category',
+            })
+          );
+          xAxis.data.setAll(data);
+          // Create series
+          function createSeries(name: string, field: string) {
+            var series = chart.series.push(
+              am5xy.ColumnSeries.new(root, {
+                name: name,
+                xAxis: xAxis,
+                yAxis: yAxis,
+                valueYField: field,
+                valueYShow: 'valueYTotalPercent',
+                categoryXField: 'category',
+                stacked: true,
+              })
+            );
+            series.data.setAll(data);
+            series.columns.template.setAll({
+              tooltipText: '{name}, {categoryX} : {valueY}',
+              width: am5.percent(90),
+              tooltipY: 10,
             });
-          });
-        }
-        createSeries('Directeur', 'director');
-        createSeries('Employé', 'employe');
-        // Add legend
-        let legend = chart.children.push(am5.Legend.new(root, {}));
-        legend.data.setAll(chart.series.values);
-        this.root = root;
-      });
+            series.data.setAll(data);
+            series.appear();
+            series.bullets.push(function () {
+              return am5.Bullet.new(root, {
+                locationY: 0,
+                sprite: am5.Label.new(root, {
+                  // text: "{valueY}",
+                  fill: root.interfaceColors.get('alternativeText'),
+                  centerY: 0,
+                  centerX: am5.p50,
+                  populateText: true,
+                }),
+              });
+            });
+          }
+          createSeries('Directeur', 'director');
+          createSeries('Employé', 'employe');
+          // Add legend
+          let legend = chart.children.push(am5.Legend.new(root, {}));
+          legend.data.setAll(chart.series.values);
+          this.root = root;
+        });
+        this.cpt++
+      }
     }
 
     if (this.users) {
-      this.browserOnly(() => {
-        if (this.root2) {
-          this.root2.dispose();
-        }
-      });
-
-      this.browserOnly(() => {
-        var root = am5.Root.new('chartdiv-users');
-
-        root.setThemes([am5themes_Animated.new(root)]);
-
-        var chart = root.container.children.push(
-          am5percent.PieChart.new(root, {
-            endAngle: 270,
-          })
-        );
-
-        // Define data
-        var data = [
-          {
-            category: 'Admin',
-            value: this.admin,
-          },
-          {
-            category: 'Directeur',
-            value: this.director,
-          },
-          {
-            category: 'User',
-            value: this.user,
-          },
-        ];
-
-        // Create series
-        var series = chart.series.push(
-          am5percent.PieSeries.new(root, {
-            valueField: 'value',
-            categoryField: 'category',
-            endAngle: 270,
-          })
-        );
-        series.states.create('hidden', {
-          endAngle: -90,
+      if (this.cpt2 == 0) {
+        this.browserOnly(() => {
+          if (this.root2) {
+            this.root2.dispose();
+          }
         });
-        series.data.setAll(data);
-        series.appear(1000, 100);
 
-        this.root2 = root;
-      });
+        this.browserOnly(() => {
+          var root = am5.Root.new('chartdiv-users');
+
+          root.setThemes([am5themes_Animated.new(root)]);
+
+          var chart = root.container.children.push(
+            am5percent.PieChart.new(root, {
+              endAngle: 270,
+            })
+          );
+
+          // Define data
+          var data = [
+            {
+              category: 'Admin',
+              value: this.admin,
+            },
+            {
+              category: 'Directeur',
+              value: this.director,
+            },
+            {
+              category: 'User',
+              value: this.user,
+            },
+          ];
+
+          // Create series
+          var series = chart.series.push(
+            am5percent.PieSeries.new(root, {
+              valueField: 'value',
+              categoryField: 'category',
+              endAngle: 270,
+            })
+          );
+          series.states.create('hidden', {
+            endAngle: -90,
+          });
+          series.data.setAll(data);
+          series.appear(1000, 100);
+
+          this.root2 = root;
+        });
+      }
+      this.cpt2++;
     }
   }
 

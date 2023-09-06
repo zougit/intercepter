@@ -160,4 +160,9 @@ export class EditDeviceFormComponent {
       });
     });
   }
+
+  ngOnDestroy() {
+    this.zoneSub.unsubscribe();
+    this.customerSub.unsubscribe();
+  }
 }

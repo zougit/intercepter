@@ -3,6 +3,7 @@ import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
 } from 'firebase/auth';
 import { Firestore } from '@angular/fire/firestore';
 import * as FireStore from 'firebase/firestore';
@@ -12,7 +13,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  private _isLoggedIn = new BehaviorSubject<boolean>(true);
+  private _isLoggedIn = new BehaviorSubject<boolean>(false);
 
   constructor(private afa: Auth, private afs: Firestore) {}
 
@@ -37,7 +38,6 @@ export class AuthService {
           signInWithEmailAndPassword(this.afa, email, user.password)
             .then(() => {
               localStorage.setItem('user', JSON.stringify(user));
-              localStorage.removeItem('isBtnActive');
               this._isLoggedIn.next(true);
               res();
             })
@@ -49,7 +49,6 @@ export class AuthService {
                   user.password
                 ).then(() => {
                   localStorage.setItem('user', JSON.stringify(user));
-                  localStorage.removeItem('isBtnActive');
                   this._isLoggedIn.next(true);
                   res();
                 });
@@ -67,6 +66,9 @@ export class AuthService {
   }
 
   public isLoggedIn() {
+    onAuthStateChanged(this.afa, (user) => {
+      user ? this._isLoggedIn.next(true) : this._isLoggedIn.next(false);
+    });
     return this._isLoggedIn.asObservable();
   }
 

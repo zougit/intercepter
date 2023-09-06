@@ -1,6 +1,6 @@
 <div class="row align-center">
   <h2 *transloco="let t">{{ t("title.devices") }}</h2>
-  <div>
+  <div *ngIf="user.role == 'admin'" >
     <button class="btn-blue left" *transloco="let t" routerLink="/devices/add">
       {{ t("title.pageAdd") }}
     </button>
@@ -15,7 +15,7 @@
   </div>
 </div>
 
-<div class="row align-center filtre">
+<div class="row align-center filtre" *ngIf="user.role == 'admin'">
   <h3>Filters:</h3>
   <div class="select row">
     <label for="zones">Zone </label>

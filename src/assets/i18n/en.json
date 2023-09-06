@@ -39,7 +39,9 @@
     "r_password": "Repeat Password",
     "role": "Role",
     "region": "Region",
-    "active": "Active"
+    "active": "Active",
+    "idCG": "Cloudgate ID",
+    "option": "Option"
   },
   "deconnexion": "Logout",
   "roles": {

@@ -15,18 +15,26 @@
           {{ user && user.role ? ("roles." + user.role | transloco) : "role" }}
         </div>
 
-        <select #select (change)="changeLanguage(select.value)">
-          <option [value]="this.userLang.code">
-            {{ this.userLang.shorthand }}
-          </option>
-          <option
+        <!-- <select #select (change)="changeLanguage(select.value)"> -->
+        <ng-select
+          style="width: 90px"
+          [(ngModel)]="selectedLang"
+          (change)="changeLanguage(selectedLang)"
+          [clearable]="false"
+        >
+          <ng-option *ngIf="userLang" [value]="this.userLang.code">
+            <img width="20" height="20" src="{{ userLang.imgUrl }}" alt="" />
+            {{ userLang.shorthand }}
+          </ng-option>
+          <ng-option
             *ngFor="let language of languagesList; index as i"
             [value]="language.code"
+            class="row"
           >
-            <!-- <img src="{{language.imgUrl}}" alt=""> -->
+            <img width="20" height="20" src="{{ language.imgUrl }}" alt="" />
             {{ language.shorthand }}
-          </option>
-        </select>
+          </ng-option>
+        </ng-select>
 
         <button class="btn btn-blue" *ngIf="isLogged" (click)="logout()">
           {{ "deconnexion" | transloco }}

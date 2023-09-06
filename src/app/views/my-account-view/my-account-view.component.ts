@@ -28,17 +28,32 @@ export class MyAccountViewComponent implements OnInit {
   constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
-    this.user = JSON.parse(localStorage.getItem('user') ?? '');
+    this.user = JSON.parse(localStorage.getItem('user') ?? '');    
     this._initForm();
   }
 
   _initForm() {
     this.userForm = this.formBuilder.group({
       name: [this.user.username, Validators.required],
-      role: [{value: this.user.role, disabled:true}, Validators.required],
+      role: [{ value: this.user.role, disabled: true }, Validators.required],
       region: [this.user.region, Validators.required],
-      active: [{value: this.user.status, disabled:true}, Validators.required],
+      active: [
+        { value: this.user.status, disabled: true },
+        Validators.required,
+      ],
+      password: { value: '', disabled: true },
+      r_password: { value: '', disabled: true },
     });
+  }
+
+  isEnabled(enabled : boolean) {
+    if (enabled) {
+      this.userForm.get('password')?.enable();
+      this.userForm.get('r_password')?.enable();
+    } else {
+      this.userForm.get('password')?.disable();
+      this.userForm.get('r_password')?.disable();
+    }
   }
 
   onClickSubmit() {

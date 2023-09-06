@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Customer } from 'src/app/models/customer.model';
 import { Device } from 'src/app/models/device.model';
+import { User } from 'src/app/models/user.model';
 import { Zone } from 'src/app/models/zone.model';
 import { CustomerService } from 'src/app/services/customer/customer.service';
 import { DeviceService } from 'src/app/services/device/device.service';
@@ -14,16 +15,7 @@ import { globals } from 'src/globals';
   styleUrls: ['./device-view.component.scss'],
 })
 export class DeviceViewComponent {
-  thead = [
-    { name: 'customer', size: '10' },
-    { name: 'zone', size: '10' },
-    { name: 'name', size: '10' },
-    { name: 'reference', size: '10' },
-    { name: 'type', size: '10' },
-    { name: 'deveui', size: '10' },
-    { name: 'last_cnx', size: '10' },
-    { name: 'alarm', size: '10' },
-  ];
+  thead!: any[];
 
   types = globals.types;
 
@@ -40,6 +32,8 @@ export class DeviceViewComponent {
   zones!: Zone[];
   zoneSub!: Subscription;
 
+  user!: User;
+
   isSorting = false;
   isChecked = false;
 
@@ -50,8 +44,34 @@ export class DeviceViewComponent {
   ) {}
 
   ngOnInit() {
+    this.user = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')!)
+      : '';
+
+    if (this.user.role != 'user') {
+      this.thead = [
+        { name: 'customer', size: '10' },
+        { name: 'zone', size: '10' },
+        { name: 'name', size: '10' },
+        { name: 'reference', size: '10' },
+        { name: 'type', size: '10' },
+        { name: 'deveui', size: '10' },
+        { name: 'last_cnx', size: '10' },
+        { name: 'alarm', size: '10' },
+      ];
+    } else {
+      this.thead = [
+        { name: 'customer', size: '10' },
+        { name: 'zone', size: '10' },
+        { name: 'name', size: '10' },
+        { name: 'reference', size: '10' },
+        { name: 'last_cnx', size: '10' },
+        { name: 'alarm', size: '10' },
+      ];
+    }
+
     this._initSubs();
-    this.customerService.items.next(JSON.parse(localStorage.getItem('customers')!))
+    // this.customerService.items.next(JSON.parse(localStorage.getItem('customers')!))
     this.customerService.getAll();
     this.zoneService.getAll();
     this.deviceService.getAll();
@@ -66,13 +86,27 @@ export class DeviceViewComponent {
         );
       }
 
+      if (this.user && this.user.zoneId) {
+        let zoneIds = this.user.zoneId.split(',');
+        // console.log(zoneIds);
+        let tab;
+        let tabs = [];
+        for (const zone of zoneIds) {
+          tab = this.devicesTab.filter((x) => x.zone == zone);
+          tabs.push(tab);
+          // console.log("zone",zone,"\ntab",tab,"\ntabs",tabs);
+        }
+        this.devicesTab = tabs.flat();
+        // console.log("device",this.devicesTab,"\n_______________________");
+      }
+
       for (let d of this.devicesTab) {
         Object.assign(d, { customer: this.getCustomerById(d.client) });
         d.zone = this.getZoneById(d.zone);
-      } 
+      }
       // console.log(this.devices);
       // console.log(this.devicesTab);
-    } 
+    }
   }
 
   canDelete(item: any) {
@@ -116,7 +150,7 @@ export class DeviceViewComponent {
     );
     this.customerSub = this.customerService.items.subscribe((items) => {
       this.customers = items;
-      localStorage.setItem('customers',JSON.stringify(items) )
+      localStorage.setItem('customers', JSON.stringify(items));
       // console.log(items);
     });
     this.deviceSub = this.deviceService.items.subscribe(

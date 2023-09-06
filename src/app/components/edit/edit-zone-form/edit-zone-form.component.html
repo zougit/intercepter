@@ -1,0 +1,105 @@
+<form [formGroup]="editForm" (ngSubmit)="onClickSubmit()">
+    <div *ngIf="errorMsg" class="alert alert-danger">
+      {{ errorMsg }}
+    </div>
+  
+    <div class="row">
+      <label>{{ "form.client" | transloco }} *</label>
+  
+      <div
+        *ngIf="
+          (editForm.controls['client'].dirty ||
+            editForm.controls['client'].touched) &&
+          editForm.controls['client'].invalid
+        "
+        class="alert alert-danger"
+      >
+        {{ "error.invalidField" | transloco }}
+      </div>
+  
+      <select [formControlName]="'client'">
+        <option value="" selected></option>
+        <option *ngFor="let cell of customers" [value]="cell.id ? cell.id : cell">
+          {{ cell.name ? cell.name : cell }}
+        </option>
+      </select>
+    </div>
+  
+    <div class="row">
+      <label>{{ "form.zone" | transloco }} *</label>
+  
+      <div
+        *ngIf="
+          (editForm.controls['zone'].dirty || editForm.controls['zone'].touched) &&
+          editForm.controls['zone'].invalid
+        "
+        class="alert alert-danger"
+      >
+        {{ "error.invalidField" | transloco }}
+      </div>
+  
+      <input [type]="'text'" [formControlName]="'zone'" />
+    </div>
+  
+    <div *ngIf="page == 'converters'" class="row">
+      <label>{{ "form.option" | transloco }} *</label>
+  
+      <div
+        *ngIf="
+          (editForm.controls['option'].dirty ||
+            editForm.controls['option'].touched) &&
+          editForm.controls['option'].invalid
+        "
+        class="alert alert-danger"
+      >
+        {{ "error.invalidField" | transloco }}
+      </div>
+  
+      <select [formControlName]="'option'">
+        <option value="" selected></option>
+        <option
+          *ngFor="
+            let cell of ['Option 1 (sans alarme)', 'Option 2 (avec alarme)']
+          "
+          [value]="cell"
+        >
+          {{ cell }}
+        </option>
+      </select>
+    </div>
+  
+    <div class="row">
+      <label>{{ "form.idCG" | transloco }} *</label>
+  
+      <div
+        *ngIf="
+          (editForm.controls['idCG'].dirty || editForm.controls['idCG'].touched) &&
+          editForm.controls['idCG'].invalid
+        "
+        class="alert alert-danger"
+      >
+        {{ "error.invalidField" | transloco }}
+      </div>
+  
+      <input [type]="'text'" [formControlName]="'idCG'" />
+    </div>
+  </form>
+  
+  <form>
+    <div class="row submit">
+      <button *transloco="let t" routerLink="/zone/{{page}}" class="btn cancel">
+        {{ t("btn.cancel") }}
+      </button>
+      <form [formGroup]="editForm" (ngSubmit)="onClickSubmit()">
+        <button
+          type="submit"
+          *transloco="let t"
+          [disabled]="editForm.invalid"
+          class="btn validate"
+        >
+          {{ t("btn.validate") }}
+        </button>
+      </form>
+    </div>
+  </form>
+  

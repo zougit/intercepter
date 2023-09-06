@@ -131,4 +131,8 @@ export class EditCustomerFormComponent {
         console.log(errMsg);
       });
   }
+
+  ngOnDestroy() {
+    this.zoneSub.unsubscribe()
+  }
 }

@@ -31,14 +31,16 @@
     "model": "Modèle",
     "color": "Couleur",
     "reference": "Référence",
-    "clientName":"Nom du client",
-    "createZone":"Créer une zone",
-    "username":"Nom",
-    "password":"Mot de passe",
-    "r_password":"Répéter mot de passe",
-    "role":"Rôle",
-    "region":"Région",
-    "active":"Actif"
+    "clientName": "Nom du client",
+    "createZone": "Créer une zone",
+    "username": "Nom",
+    "password": "Mot de passe",
+    "r_password": "Répéter mot de passe",
+    "role": "Rôle",
+    "region": "Région",
+    "active": "Actif",
+    "idCG": "Identifiant CloudGate",
+    "option": "Option"
   },
   "deconnexion": "Déconnexion",
   "roles": {
@@ -88,14 +90,14 @@
     "dateHourServ": "Date/Heure serveur",
     "dateHourLocal": "Date/Heure locale",
     "deveui": "deveui",
-    "cgId":"CloudGate",
-    "id":"ID",
-    "nbDevices":"Nb Devices",
-    "option":"Option",
-    "details":"Détails"
+    "cgId": "CloudGate",
+    "id": "ID",
+    "nbDevices": "Nb Devices",
+    "option": "Option",
+    "details": "Détails"
   },
 
   "error": {
-    "invalidField":"Ce champ est obligatoire"
+    "invalidField": "Ce champ est obligatoire"
   }
 }

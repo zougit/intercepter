@@ -1,8 +1,8 @@
 <h2 *transloco="let t">{{ "title."+page | transloco }} > {{ t("title.pageEdit") }} </h2>
 <app-edit-customer-form *ngIf="page == 'customers'" [id]="id"></app-edit-customer-form>
 <app-edit-device-form *ngIf="page == 'devices'" [id]="id"></app-edit-device-form>
+<app-edit-user-form *ngIf="page == 'users'" [id]="id"></app-edit-user-form>
+<app-edit-zone-form *ngIf="page === 'dealerships' || page === 'converters'" [id]="id" [page]="page"></app-edit-zone-form>
 
 <!-- TODO -  edit user app -->
-<!-- TODO -  edit user -->
 <!-- TODO -  edit zone -->
-<!-- FIXME - modifier cancel form -->

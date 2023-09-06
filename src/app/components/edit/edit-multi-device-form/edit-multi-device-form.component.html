@@ -91,17 +91,21 @@
       </div>
     </fieldset>
   </div>
+</form>
+<form>
   <div class="row submit">
     <button *transloco="let t" routerLink="/devices" class="btn cancel">
       {{ t("btn.cancel") }}
     </button>
-    <button
-      type="submit"
-      *transloco="let t"
-      [disabled]="editForm.invalid"
-      class="btn"
-    >
-      {{ t("btn.validate") }}
-    </button>
+    <form [formGroup]="editForm" (ngSubmit)="onClickSubmit()">
+      <button
+        type="submit"
+        *transloco="let t"
+        [disabled]="editForm.invalid"
+        class="btn validate"
+      >
+        {{ t("btn.validate") }}
+      </button>
+    </form>
   </div>
 </form>

@@ -55,7 +55,11 @@
     <div class="row" *ngIf="device?.imgPath">
       <label>{{ "form.img" | transloco }}</label>
 
-      <img [src]="device.imgPath" style="max-width:100%;max-height:300px" alt="" />
+      <img
+        [src]="device.imgPath"
+        style="max-width: 100%; max-height: 300px"
+        alt=""
+      />
     </div>
     <div class="row">
       <label>{{ "form.img" | transloco }}</label>
@@ -68,18 +72,21 @@
       />
     </div>
   </fieldset>
-
+</form>
+<form>
   <div class="row submit">
     <button *transloco="let t" routerLink="/devices" class="btn cancel">
       {{ t("btn.cancel") }}
     </button>
-    <button
-      type="submit"
-      *transloco="let t"
-      [disabled]="editForm.invalid"
-      class="btn"
-    >
-      {{ t("btn.validate") }}
-    </button>
+    <form [formGroup]="editForm" (ngSubmit)="onClickSubmit()">
+      <button
+        type="submit"
+        *transloco="let t"
+        [disabled]="editForm.invalid"
+        class="btn validate"
+      >
+        {{ t("btn.validate") }}
+      </button>
+    </form>
   </div>
 </form>

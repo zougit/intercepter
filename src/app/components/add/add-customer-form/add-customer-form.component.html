@@ -23,19 +23,19 @@
     <label>Type *</label>
 
     <div
-    *ngIf="
-      (addForm.controls['type'].dirty || addForm.controls['type'].touched) &&
-      addForm.controls['type'].invalid
-    "
-    class="alert alert-danger"
-  >
-    {{ "error.invalidField" | transloco }}
-  </div>
+      *ngIf="
+        (addForm.controls['type'].dirty || addForm.controls['type'].touched) &&
+        addForm.controls['type'].invalid
+      "
+      class="alert alert-danger"
+    >
+      {{ "error.invalidField" | transloco }}
+    </div>
 
     <select formControlName="type">
       <option value="" selected>Choisir</option>
       <option *ngFor="let cell of types" [value]="cell.id">
-        {{ cell.name | transloco}}
+        {{ cell.name | transloco }}
       </option>
     </select>
   </div>
@@ -43,25 +43,36 @@
   <div *ngFor="let item of [].constructor(cpt); let i = index" class="row">
     <label>{{ "form.createZone" | transloco }} ({{ i + 1 }})</label>
 
-    <input type="text" [(ngModel)]="zones[i]" [ngModelOptions]="{standalone: true}"/>
+    <input
+      type="text"
+      [(ngModel)]="zones[i]"
+      [ngModelOptions]="{ standalone: true }"
+    />
   </div>
 
   <div class="row action-affect">
-    <button type="button" (click)="onClickCpt('minus')" class="btn normal">-</button>
-    <button type="button" (click)="onClickCpt('plus')" class="btn normal">+</button>
+    <button type="button" (click)="onClickCpt('minus')" class="btn normal">
+      -
+    </button>
+    <button type="button" (click)="onClickCpt('plus')" class="btn normal">
+      +
+    </button>
   </div>
-
+</form>
+<form>
   <div class="row submit">
     <button *transloco="let t" routerLink="/customers" class="btn cancel">
       {{ t("btn.cancel") }}
     </button>
-    <button
-      type="submit"
-      *transloco="let t"
-      [disabled]="addForm.invalid"
-      class="btn"
-    >
-      {{ t("btn.validate") }}
-    </button>
+    <form [formGroup]="addForm" (ngSubmit)="onClickSubmit()">
+      <button
+        type="submit"
+        *transloco="let t"
+        [disabled]="addForm.invalid"
+        class="btn validate"
+      >
+        {{ t("btn.validate") }}
+      </button>
+    </form>
   </div>
 </form>

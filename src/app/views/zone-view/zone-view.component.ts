@@ -8,6 +8,9 @@ import { ZoneService } from 'src/app/services/zone/zone.service';
 import { globals } from 'src/globals';
 import { Device } from 'src/app/models/device.model';
 import { DeviceService } from 'src/app/services/device/device.service';
+import { UserService } from 'src/app/services/user/user.service';
+import { User } from 'src/app/models/user.model';
+import { array } from '@amcharts/amcharts5';
 
 @Component({
   selector: 'app-zone-view',
@@ -48,6 +51,9 @@ export class ZoneViewComponent {
 
   zoneType!: Zone[];
 
+  users!: User[];
+  userSub!: Subscription;
+
   isSorting = false;
   types = globals.types;
 
@@ -55,34 +61,52 @@ export class ZoneViewComponent {
     private location: Location,
     private customerService: CustomerService,
     public zoneService: ZoneService,
-    public deviceService: DeviceService
+    private deviceService: DeviceService,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
     this.path = this.location.path().slice(6);
-    // console.log(this.path);
+    // console.log('on init ', this.path);
     this._initSubs();
     this.customerService.getAll();
     this.zoneService.getAll();
     this.deviceService.getAll();
+    this.userService.getAll();
 
     this.isSorting = false;
   }
 
   ngAfterContentChecked() {
-    if (this.customers && this.zones && this.devices) {
+    if (this.customers && this.zones && this.devices && this.users) {
       for (let z of this.zones) {
         Object.assign(z, { customer: this.getCustomerById(z.customerId) });
         z.nbDevices = this.getNbDevice(z.id);
+        Object.assign(z, {
+          canDel: z.nbDevices || this.filterUserZone(z.id).length > 0 ? false : true,
+        });
       }
+
       if (!this.isSorting) {
-        let type = this.types.find((t) => t.name === this.path)!.id;
-        this.zoneType = this.getZonebyType(type);
+        let type = this.types.find((t) => t.name === this.path)?.id;
+        this.zoneType = this.getZonebyType(type!);
       }
       // console.log(this.zoneType);
     }
   }
-  //FIXME - finir le candelete avec la conditon du user
+
+  filterUserZone(id: string) {
+    return this.users.filter((x) => {
+      let zone: string[] = x.zoneId.split(",");
+      zone = zone.filter((x) => x == id);
+      
+      if (zone.length > 0) {
+        return zone;
+      }
+      return;
+    });
+  }
+
   canDelete(item: Zone) {
     if (item.nbDevices) {
       // console.log(item);
@@ -93,15 +117,15 @@ export class ZoneViewComponent {
 
   getNbDevice(zoneId: string) {
     if (zoneId) {
-      return this.devices.filter((x) => x.zone == zoneId).length
+      return this.devices.filter((x) => x.zone == zoneId).length;
     }
     return 0;
   }
 
   getByCustomer(id: string) {
     if (id != '') {
-      let type = this.types.find((t) => t.name === this.path)!.id;
-      this.zoneType = this.getZonebyType(type).filter(
+      let type = this.types.find((t) => t.name === this.path)?.id;
+      this.zoneType = this.getZonebyType(type!).filter(
         (z) => z.customerId == id
       );
       this.isSorting = true;
@@ -123,20 +147,23 @@ export class ZoneViewComponent {
   }
 
   getZonebyType(type: number) {
-    this.customerZone = this.customers.filter(
-      (s) => s.type === type.toString()
-    );
-    let zonescustomer = [];
+    if (type) {
+      this.customerZone = this.customers.filter(
+        (s) => s.type === type.toString()
+      );
+      let zonescustomer = [];
 
-    for (const c of this.customerZone) {
-      for (const z of this.zones) {
-        if (z.customerId === c.id) {
-          zonescustomer.push(z);
+      for (const c of this.customerZone) {
+        for (const z of this.zones) {
+          if (z.customerId === c.id) {
+            zonescustomer.push(z);
+          }
         }
       }
-    }
 
-    return zonescustomer;
+      return zonescustomer;
+    }
+    return [];
   }
 
   _initSubs() {
@@ -149,10 +176,15 @@ export class ZoneViewComponent {
     this.deviceSub = this.deviceService.items.subscribe(
       (items) => (this.devices = items)
     );
+    this.userSub = this.userService.items.subscribe(
+      (items) => (this.users = items)
+    );
   }
 
   ngOnDestroy() {
     this.customerSub.unsubscribe();
     this.zoneSub.unsubscribe();
+    this.deviceSub.unsubscribe();
+    this.userSub.unsubscribe();
   }
 }

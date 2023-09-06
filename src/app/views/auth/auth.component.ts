@@ -35,9 +35,7 @@ export class AuthComponent implements OnInit {
     this.authService.login({
       username: this.loginForm.value.username,
       password: this.loginForm.value.password,
-    }).then(() => {
-      console.log("test");
-      
+    }).then(() => {      
       this.router.navigate(['']);
     });
   }

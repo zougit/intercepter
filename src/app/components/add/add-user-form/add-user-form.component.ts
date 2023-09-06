@@ -74,8 +74,6 @@ export class AddUserFormComponent {
       role: ['', Validators.required],
       region: ['', Validators.required],
       active: ['', Validators.required],
-      // client: ['', Validators.required],
-      // zone: ['', Validators.required],
       client: '',
       zone: '',
     });
@@ -146,5 +144,10 @@ export class AddUserFormComponent {
       .add(newUser as User)
       .then(() => this.router.navigate(['admin-bo']))
       .catch((errMsg) => (this.errorMsg = errMsg));
+  }
+
+  ngOnDestroy() {
+    this.zoneSub.unsubscribe();
+    this.customerSub.unsubscribe();
   }
 }

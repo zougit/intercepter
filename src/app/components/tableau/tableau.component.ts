@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
   faCheckDouble,
@@ -7,13 +14,14 @@ import {
   faCircleInfo,
 } from '@fortawesome/free-solid-svg-icons';
 import { DialogDetailComponent } from '../dialog-detail/dialog-detail.component';
+import { User } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-tableau',
   templateUrl: './tableau.component.html',
   styleUrls: ['./tableau.component.scss'],
 })
-export class TableauComponent {
+export class TableauComponent implements OnInit, OnChanges {
   @Input() thead!: any;
   @Input() content!: any;
   @Input() page!: string;
@@ -21,6 +29,8 @@ export class TableauComponent {
   @Input() function!: any;
   @Output() boxCheckEmitter = new EventEmitter<any[]>();
   boxCheck: any[] = [];
+
+  user!: User;
 
   itemsPerPage = 18;
   p = 1;
@@ -40,6 +50,12 @@ export class TableauComponent {
   isChecked: any[] = [];
 
   constructor(public dialog: MatDialog) {}
+
+  ngOnInit(): void {
+    this.user = localStorage.getItem('user')
+      ? JSON.parse(localStorage.getItem('user')!)
+      : '';
+  }
 
   ngOnChanges() {
     let row = [];
@@ -138,8 +154,13 @@ export class TableauComponent {
     }
   }
 
-  canDelete(item: any, func: any) {
-    return func(item);
+  canDelete(item: any) {
+    if (this.hasProp(item, 'canDel')) {
+      return item.canDel;
+    } else {
+      return this.function(item);
+    }
+    // return this.function(item);
   }
 
   openDetails(id: string) {

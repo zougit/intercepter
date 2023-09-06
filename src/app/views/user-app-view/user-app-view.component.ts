@@ -69,10 +69,6 @@ export class UserAppViewComponent
   }
 
   canDelete(item: any) {
-    if(item) {
-      console.log(item);
-      return false;
-    }
     return true;
   }
 

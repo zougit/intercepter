@@ -105,4 +105,9 @@ export class AddUserAppFormComponent {
       .then(() => this.router.navigate(['user-app']))
       .catch((errMsg) => (this.errorMsg = errMsg));
   }
+
+  ngOnDestroy() {
+    this.zoneSub.unsubscribe();
+    this.customerSub.unsubscribe();
+  }
 }

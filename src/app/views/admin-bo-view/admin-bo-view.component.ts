@@ -35,6 +35,8 @@ export class AdminBOViewComponent {
 
   types = globals.types;
 
+  user!: User
+
   constructor(
     public userService: UserService,
     private customerService: CustomerService,
@@ -42,6 +44,10 @@ export class AdminBOViewComponent {
   ) {}
 
   ngOnInit() {
+    this.user = localStorage.getItem('user')
+    ? JSON.parse(localStorage.getItem('user')!)
+    : '';
+
     this._initSubs();
     this.userService.getAll();
     this.customerService.getAll();
@@ -50,6 +56,11 @@ export class AdminBOViewComponent {
 
   ngAfterContentChecked() {
     if (this.users && this.customers && this.zones) {
+
+      if(this.user.role == 'director') {
+        this.users = this.users.filter(x => x.role == 'user')
+      }
+
       for (let u of this.users) {
         Object.assign(u, {
           customer: this.customers.find((x) => x.id == u.clientId)?.name ?? '',
@@ -65,7 +76,6 @@ export class AdminBOViewComponent {
 
   canDelete(item: User) {
     if(item.role == 'admin') {
-      // console.log(item);
       return false;
     }
     return true;
@@ -99,6 +109,7 @@ export class AdminBOViewComponent {
   }
 
   ngOnDestroy() {
+    this.userSub.unsubscribe();
     this.customerSub.unsubscribe();
     this.zoneSub.unsubscribe();
   }

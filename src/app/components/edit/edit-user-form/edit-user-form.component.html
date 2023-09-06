@@ -1,6 +1,4 @@
-<h2>{{ "title.myAccount" | transloco }}</h2>
-
-<form [formGroup]="userForm" (ngSubmit)="onClickSubmit()">
+<form [formGroup]="editForm" (ngSubmit)="onClickSubmit()">
   <div *ngIf="errorMsg" class="alert alert-danger">
     {{ errorMsg }}
   </div>
@@ -10,16 +8,16 @@
 
     <div
       *ngIf="
-        (userForm.controls['name'].dirty ||
-          userForm.controls['name'].touched) &&
-        userForm.controls['name'].invalid
+        (editForm.controls['username'].dirty ||
+          editForm.controls['username'].touched) &&
+        editForm.controls['username'].invalid
       "
       class="alert alert-danger"
     >
       {{ "error.invalidField" | transloco }}
     </div>
 
-    <input [type]="'text'" [formControlName]="'name'" />
+    <input [type]="'text'" [formControlName]="'username'" />
   </div>
 
   <div *ngFor="let t of tabSelect" class="row">
@@ -27,16 +25,16 @@
 
     <div
       *ngIf="
-        (userForm.controls[t.name].dirty ||
-          userForm.controls[t.name].touched) &&
-        userForm.controls[t.name].invalid
+        (editForm.controls[t.name].dirty ||
+          editForm.controls[t.name].touched) &&
+        editForm.controls[t.name].invalid
       "
       class="alert alert-danger"
     >
       {{ "error.invalidField" | transloco }}
     </div>
 
-    <select [formControlName]="t.name" [attr.disabled]="'true'">
+    <select [formControlName]="t.name" [attr.disabled]="true">
       <option value="" selected></option>
       <option *ngFor="let cell of t.key" [value]="cell">
         {{ cell }}
@@ -44,6 +42,7 @@
     </select>
   </div>
 
+  
   <div class="row">
     <label for="">Éditer mot de passe *</label>
     <div>
@@ -57,9 +56,9 @@
 
     <div
       *ngIf="
-        (userForm.controls['password'].dirty ||
-          userForm.controls['password'].touched) &&
-        userForm.controls['password'].invalid
+        (editForm.controls['password'].dirty ||
+          editForm.controls['password'].touched) &&
+        editForm.controls['password'].invalid
       "
       class="alert alert-danger"
     >
@@ -73,9 +72,9 @@
 
     <div
       *ngIf="
-        (userForm.controls['r_password'].dirty ||
-          userForm.controls['r_password'].touched) &&
-        userForm.controls['r_password'].invalid
+        (editForm.controls['r_password'].dirty ||
+          editForm.controls['r_password'].touched) &&
+        editForm.controls['r_password'].invalid
       "
       class="alert alert-danger"
     >

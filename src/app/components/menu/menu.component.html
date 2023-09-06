@@ -2,7 +2,7 @@
   <h2 class="nav">Navigation</h2>
 </div>
 
-<div class="menu">
+<div class="menu" *ngIf="user.role == 'admin'">
   <ul class="main-menu" >
     <li class="niv-1" [ngClass]="{'active': isBtnActive === 1}">
       <button *transloco="let t" (click)="toggleBtn(1)" routerLink=""> {{t("title.welcome")}} </button>
@@ -48,6 +48,31 @@
         </li>
         <li class="niv-2" [ngClass]="{'active': isBtnActive === 13}">
             <button *transloco="let t" (click)="toggleBtn(13)" routerLink="logs">Logs App</button>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+<div class="menu" *ngIf="user.role != 'admin'">
+  <ul class="main-menu" >
+    <li class="niv-1" [ngClass]="{'active': isBtnActive === 1}">
+      <button *transloco="let t" (click)="toggleBtn(8)" routerLink=""> {{t("title.welcome")}} </button>
+    </li>
+
+    <li class="niv-1" [ngClass]="{'active': isBtnActive === 2}">
+      <button *transloco="let t" (click)="toggleBtn(2)" routerLink="my-account">{{t("title.myAccount")}}</button>
+    </li>
+
+    <li class="niv-1" [ngClass]="{'active': isBtnActive === 3}" *ngIf="user.role == 'director'">
+      <button *transloco="let t" (click)="toggleBtn(3)" routerLink="admin-bo">Admins BackOffice</button>
+    </li>
+    
+    <li class="niv-1 disabled-link">
+      <button *transloco="let t">{{t("title.deviceBase")}}</button>
+      <ul>
+        <li class="niv-2" [ngClass]="{'active': isBtnActive === 8}" >
+          <button *transloco="let t" (click)="toggleBtn(8)" routerLink="devices">{{t("title.device1")}}</button>
         </li>
       </ul>
     </li>

@@ -21,9 +21,38 @@ import { MyAccountViewComponent } from './views/my-account-view/my-account-view.
 import { UserAppViewComponent } from './views/user-app-view/user-app-view.component';
 import { AppPacViewComponent } from './views/app-pac-view/app-pac-view.component';
 import { AuthComponent } from './views/auth/auth.component';
+import { map } from 'rxjs';
 
 const redirectLogInToHome = () => redirectLoggedInTo(['']);
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
+const redirectUnauthorizedOrUserRoleToHome = () => map(() =>  {
+  let user = localStorage.getItem('user')
+  ? JSON.parse(localStorage.getItem('user')!)
+  : '';
+
+  if(!user) {
+    return ['login'];
+  } else if (user.role == 'admin') {
+    return true 
+  } else {
+    return ['devices']
+  }
+
+})
+const redirectUnauthorizedOrDirectorRoleToHome = () => map(() =>  {
+  let user = localStorage.getItem('user')
+  ? JSON.parse(localStorage.getItem('user')!)
+  : '';
+
+  if(!user) {
+    return ['login'];
+  } else if (user.role == 'admin' || user.role == 'director') {
+    return true 
+  } else {
+    return ['devices']
+  }
+
+})
 
 const routes: Routes = [
   {
@@ -36,7 +65,7 @@ const routes: Routes = [
     path: '',
     component: WelcomeViewComponent,
     canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedOrUserRoleToHome },
   },
   {
     path: 'my-account',
@@ -48,13 +77,13 @@ const routes: Routes = [
     path: 'admin-bo',
     component: AdminBOViewComponent,
     canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedOrDirectorRoleToHome },
   },
   {
     path: 'customers',
     component: CustomerViewComponent,
     canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedOrUserRoleToHome },
   },
   {
     path: 'devices',
@@ -66,61 +95,61 @@ const routes: Routes = [
     path: 'alarms',
     component: AlarmsViewComponent,
     canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedOrUserRoleToHome },
   },
   {
     path: 'setup',
     component: SetupViewComponent,
     canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedOrUserRoleToHome },
   },
   {
     path: 'app-pac',
     component: AppPacViewComponent,
     canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedOrUserRoleToHome },
   },
   {
     path: 'user-app',
     component: UserAppViewComponent,
     canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedOrUserRoleToHome },
   },
   {
     path: 'logs',
     component: LogViewComponent,
     canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedOrUserRoleToHome },
   },
   {
     path: ':page/add',
     component: AddBaseViewComponent,
     canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedOrUserRoleToHome },
   },
   {
     path: ':page/edit/:id',
     component: EditBaseViewComponent,
     canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedOrUserRoleToHome },
   },
   {
     path: 'devices/multiEdit',
     component: EditMultiDeviceFormComponent,
     canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedOrUserRoleToHome },
   },
   {
     path: 'zone/dealerships',
     component: ZoneViewComponent,
     canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedOrUserRoleToHome },
   },
   {
     path: 'zone/converters',
     component: ZoneViewComponent,
     canActivate: [AuthGuard],
-    data: { authGuardPipe: redirectUnauthorizedToLogin },
+    data: { authGuardPipe: redirectUnauthorizedOrUserRoleToHome },
   },
 ];
 

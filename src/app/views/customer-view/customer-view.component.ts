@@ -45,11 +45,12 @@ export class CustomerViewComponent {
         Object.assign(c, { zone: this.getZoneByCustomerId(c.id) });
         Object.assign(c, { typeId: this.getZoneByCustomerId(c.type) });
         c.type = this.types.find((t) => t.id === +c.type)?.name ?? "";
+        Object.assign(c, { canDel: this.zones.find(x => x.customerId == c.id) ? false : true });
         // console.log(c);
       }
     }
   }
-//FIXME - faire la conditon des zones pour candelete
+
   canDelete(item: Customer) {
     if(item) {
       // console.log(item);

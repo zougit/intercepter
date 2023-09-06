@@ -52,7 +52,7 @@ export class EditMultiDeviceFormComponent {
   ngOnInit() {
     let ids = sessionStorage.getItem('Ids');
     this.ids = ids!.split(',');
-    console.log(this.ids);
+    // console.log(this.ids);
 
     this._initForm();
     this._initSubs();

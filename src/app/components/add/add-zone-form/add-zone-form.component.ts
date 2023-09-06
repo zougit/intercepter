@@ -1,88 +1,97 @@
-import { Component, Input } from '@angular/core';
+import {
+  AfterContentChecked,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { Customer } from 'src/app/models/customer.model';
 import { Zone } from 'src/app/models/zone.model';
+import { CustomerService } from 'src/app/services/customer/customer.service';
 import { ZoneService } from 'src/app/services/zone/zone.service';
+import { globals } from 'src/globals';
 
 @Component({
   selector: 'app-add-zone-form',
   templateUrl: './add-zone-form.component.html',
   styleUrls: ['./add-zone-form.component.scss'],
 })
-export class AddZoneFormComponent {
+export class AddZoneFormComponent
+  implements OnInit, AfterContentChecked, OnDestroy
+{
   @Input() page!: string;
 
   addForm!: FormGroup;
   errorMsg!: string;
-  isAdmins = true;
 
-  zones!: Zone[];
-  zoneSub!: Subscription;
+  customers!: Customer[];
+  customerSub!: Subscription;
 
-  tab = ['username', 'password', 'r_password'];
-  tabSelect!: any[];
+  type = globals.types;
 
   constructor(
     private formBuilder: FormBuilder,
     private zoneService: ZoneService,
+    private customerService: CustomerService,
     private router: Router
   ) {}
 
   ngOnInit() {
     this._initSubs();
-    this.zoneService.getAll();
+    this.customerService.getAll();
     this._initForm();
   }
 
   ngAfterContentChecked() {
-    this.tabSelect = [
-      { key: ['yes', 'no'], name: 'active' },
-    ];
+    if (this.customers && this.page) {
+      this.customers = this.customers.filter(
+        (s) =>
+          s.type === this.type.find((x) => x.name == this.page)?.id.toString()
+      );
+    }
   }
 
   _initForm() {
     this.addForm = this.formBuilder.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required],
-      r_password: ['', Validators.required],
-      role: ['', Validators.required],
-      region: ['', Validators.required],
-      active: ['', Validators.required],
-      // client: ['', Validators.required],
-      // zone: ['', Validators.required],
-      client: '',
-      zone: '',
-    });
-  }
+      client: ['', Validators.required],
+      zone: ['', Validators.required],
 
-  isAdmin(role: string, name: string) {
-    if (
-      name == 'role' &&
-      role.split("'")[1] != 'admin' &&
-      role.split("'")[1] != ('' as string)
-    ) {
-      this.isAdmins = false;
-    } else if (
-      name == 'role' &&
-      (role.split("'")[1] === 'admin' || role.split("'")[1] === ('' as string))
-    ) {
-      this.isAdmins = true;
+      idCG: ['', Validators.required],
+    });
+    if (this.page && this.page == 'converters') {
+      this.addForm.addControl(
+        'option',
+        this.formBuilder.control(['', Validators.required])
+      );
     }
   }
 
   _initSubs() {
-    this.zoneSub = this.zoneService.items.subscribe(
-      (items) => (this.zones = items)
+    this.customerSub = this.customerService.items.subscribe(
+      (items) => (this.customers = items)
     );
   }
 
   onClickSubmit() {
-    const newUser = new Zone('', '').toPlainObj();
+    const newUser = new Zone(
+      this.addForm.value['zone'],
+      this.addForm.value['client'],
+      'On',
+      0,
+      this.addForm.value['idCG'],
+      this.addForm.value['option']
+    ).toPlainObj();
 
     this.zoneService
       .add(newUser as Zone)
-      .then(() => this.router.navigate(['zone/'+this.page]))
+      .then(() => this.router.navigate(['zone/' + this.page]))
       .catch((errMsg) => (this.errorMsg = errMsg));
+  }
+
+  ngOnDestroy(): void {
+    this.customerSub.unsubscribe();
   }
 }

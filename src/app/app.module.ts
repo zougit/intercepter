@@ -14,6 +14,7 @@ import { TranslocoService } from '@ngneat/transloco';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatDialogModule } from '@angular/material/dialog';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -51,6 +52,9 @@ import { UserAppViewComponent } from './views/user-app-view/user-app-view.compon
 import { AuthGuard } from '@angular/fire/auth-guard';
 import { AuthService } from './services/auth/auth.service';
 import { AddUserAppFormComponent } from './components/add/add-user-app-form/add-user-app-form.component';
+import { EditUserAppFormComponent } from './components/edit/edit-user-app-form/edit-user-app-form.component';
+import { EditUserFormComponent } from './components/edit/edit-user-form/edit-user-form.component';
+import { EditZoneFormComponent } from './components/edit/edit-zone-form/edit-zone-form.component';
 
 @NgModule({
   declarations: [
@@ -80,9 +84,13 @@ import { AddUserAppFormComponent } from './components/add/add-user-app-form/add-
     AddZoneFormComponent,
     AuthComponent,
     AddUserAppFormComponent,
+    EditUserAppFormComponent,
+    EditUserFormComponent,
+    EditZoneFormComponent,
   ],
   imports: [
     BrowserModule,
+    NgSelectModule,
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,

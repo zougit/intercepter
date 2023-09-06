@@ -4,6 +4,5 @@
 <app-add-customer-form *ngIf="page === 'customers'"></app-add-customer-form>
 <app-add-user-form *ngIf="page === 'users'"></app-add-user-form>
 <app-add-user-app-form *ngIf="page === 'userApp'"></app-add-user-app-form>
+<app-add-zone-form *ngIf="page === 'dealerships' || page === 'converters'" [page]="page"></app-add-zone-form>
 
-<!-- FIXME - modifier form cancel -->
-<!-- TODO - add zone à finir  -->

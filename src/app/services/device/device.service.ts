@@ -28,6 +28,8 @@ export class DeviceService extends BaseService<Device> {
           this.afStorage,
           imgPathSplit[imgPathSplit.length - 1]!.split('?')[0]
         );
+        console.log(img);
+        
         deleteObject(img);
       }
 

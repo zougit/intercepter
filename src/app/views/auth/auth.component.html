@@ -46,4 +46,8 @@
       <button class="btn" [disabled]="loginForm.invalid">Envoyer</button>
     </div>
   </form>
+
+  <button (click)="authService.googleSignin()">
+    <i class="fa fa-google"></i> Connect Google
+  </button>
 </div>

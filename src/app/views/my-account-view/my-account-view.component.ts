@@ -4,7 +4,7 @@ import { User } from 'src/app/models/user.model';
 import { UserService } from 'src/app/services/user/user.service';
 import { globals } from 'src/globals';
 
-//TODO - modifier l'auth pour edit un user et finir le formulaire
+//TODO - modifier l'auth pour edit un user
 @Component({
   selector: 'app-my-account-view',
   templateUrl: './my-account-view.component.html',

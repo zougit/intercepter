@@ -150,7 +150,7 @@ export class DeviceViewComponent {
     );
     this.customerSub = this.customerService.items.subscribe((items) => {
       this.customers = items;
-      localStorage.setItem('customers', JSON.stringify(items));
+      // localStorage.setItem('customers', JSON.stringify(items));
       // console.log(items);
     });
     this.deviceSub = this.deviceService.items.subscribe(

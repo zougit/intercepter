@@ -67,7 +67,6 @@ export class ZoneViewComponent {
 
   ngOnInit() {
     this.path = this.location.path().slice(6);
-    // console.log('on init ', this.path);
     this._initSubs();
     this.customerService.getAll();
     this.zoneService.getAll();

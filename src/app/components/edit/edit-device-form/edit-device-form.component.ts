@@ -132,12 +132,14 @@ export class EditDeviceFormComponent {
 
     uploadBytes(fileRef, this.fileSelected).finally(() => {
       getDownloadURL(fileRef).then((url) => {
-        let imgPathSplit = this.device.imgPath.split('/');
-        let img = ref(
-          this.afs,
-          imgPathSplit[imgPathSplit.length - 1]!.split('?')[0]
-        );
-        deleteObject(img);
+        if (this.device.imgPath) {
+          let imgPathSplit = this.device.imgPath.split('/');
+          let img = ref(
+            this.afs,
+            imgPathSplit[imgPathSplit.length - 1]!.split('?')[0]
+          );
+          deleteObject(img);
+        }
         this.deviceService
           .edit({
             id: this.id,

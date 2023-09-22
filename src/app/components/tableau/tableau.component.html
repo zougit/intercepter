@@ -1,20 +1,14 @@
 <table *ngIf="isTableEmpty()">
   <thead>
     <tr>
-      <th
-        *ngIf="page === 'devices' && user.role != 'user'"
-        class="col-1 col-date text-center"
-      >
+      <th *ngIf="page === 'devices' && user.role != 'user'" class="col-1 col-date text-center">
         <button class="check" (click)="checkAll()">
           <fa-icon [icon]="doublecheck" class="fa-lg"></fa-icon>
         </button>
       </th>
 
-      <th
-        *ngFor="let th of thead; index as i"
-        class="col-{{ th.size }} "
-        [ngClass]="page == 'devices' ? 'col-date text-center' : ''"
-      >
+      <th *ngFor="let th of thead; index as i" class="col-{{ th.size }} "
+        [ngClass]="page == 'devices' ? 'col-date text-center' : ''">
         {{ th.name == "" ? "" : ("tab." + th.name | transloco) }}
       </th>
 
@@ -36,78 +30,51 @@
     </tr>
   </thead>
 
-  <tr
-    *ngFor="
-      let td of page === 'devices'
-        ? (tbody | paginate : { itemsPerPage, currentPage: p })
-        : tbody;
-      index as i
-    "
-  >
-    <td *ngIf="page === 'devices' && user.role != 'user'">
-      <input
-        *ngIf="hasProp(isChecked[i + itemsPerPage * (p - 1)], 'value')"
-        [checked]="toggle2 || isChecked[i + itemsPerPage * (p - 1)].value"
-        (change)="addChecked(content[i + itemsPerPage * (p - 1)].id, $event)"
-        type="checkbox"
-      />
-    </td>
+  <tbody>
+    <tr *ngFor="
+        let td of page === 'devices'
+          ? (tbody | paginate : { itemsPerPage, currentPage: p })
+          : tbody;
+        index as i
+      ">
+      <td *ngIf="page === 'devices' && user.role != 'user'">
+        <input *ngIf="hasProp(isChecked[i + itemsPerPage * (p - 1)], 'value')"
+          [checked]="toggle2 || isChecked[i + itemsPerPage * (p - 1)].value"
+          (change)="addChecked(content[i + itemsPerPage * (p - 1)].id, $event)" type="checkbox" />
+      </td>
 
-    <td
-      *ngFor="let cell of td; index as i"
-      class="col-{{ thead[i].size }}"
-      [ngClass]="page == 'devices' ? 'col-date text-center' : ''"
-    >
-      <span *ngIf="!Array.isArray(cell)">{{ cell }}</span>
-      <ul *ngIf="Array.isArray(cell)">
-        <li *ngFor="let c of cell">{{ c }}</li>
-      </ul>
-    </td>
+      <td *ngFor="let cell of td; index as i" class="col-{{ thead[i].size }}"
+        [ngClass]="page == 'devices' ? 'col-date text-center' : ''">
+        <span *ngIf="!Array.isArray(cell)">{{ cell }}</span>
+        <ul *ngIf="Array.isArray(cell)">
+          <li *ngFor="let c of cell">{{ c }}</li>
+        </ul>
+      </td>
 
-    <td *ngIf="page === 'devices'" class="col-5 col-date text-center">
-      <fa-icon
-        (click)="openDetails(content[i + itemsPerPage * (p - 1)].id)"
-        [icon]="info"
-        class="fa-lg"
-      ></fa-icon>
-    </td>
+      <td *ngIf="page === 'devices'" class="col-5 col-date text-center">
+        <fa-icon (click)="openDetails(content[i + itemsPerPage * (p - 1)].id)" [icon]="info" class="fa-lg"></fa-icon>
+      </td>
 
-    <td *ngIf="page === 'devices'" class="col-5 col-date text-center">
-      <mat-slide-toggle [checked]="toggle" class="toggle"> </mat-slide-toggle>
-    </td>
+      <td *ngIf="page === 'devices'" class="col-5 col-date text-center">
+        <mat-slide-toggle [checked]="toggle" class="toggle"> </mat-slide-toggle>
+      </td>
 
-    <td
-      *ngIf="page !== 'alarms' && page !== 'logs' && user.role != 'user'"
-      class="col-5 text-center"
-    >
-      <fa-icon
-        [icon]="edit"
-        routerLink="/{{ page }}/edit/{{
-          content[i + itemsPerPage * (p - 1)].id
-        }}"
-        class="green fa-lg"
-      ></fa-icon>
-    </td>
-    <td
-      *ngIf="page !== 'alarms' && page !== 'logs' && user.role != 'user'"
-      class="col-5 text-center"
-    >
-      <fa-icon
-        (click)="onClickDelete(content[i + itemsPerPage * (p - 1)].id)"
-        [icon]="trash"
-        class="red fa-lg"
-        *ngIf="canDelete(content[i + itemsPerPage * (p - 1)])"
-      ></fa-icon>
-      <span *ngIf="!canDelete(content[i + itemsPerPage * (p - 1)])">_</span>
-    </td>
-  </tr>
+      <td *ngIf="page !== 'alarms' && page !== 'logs' && user.role != 'user'" class="col-5 text-center">
+        <fa-icon [icon]="edit" routerLink="/{{ page }}/edit/{{
+            content[i + itemsPerPage * (p - 1)].id
+          }}" class="green fa-lg"></fa-icon>
+      </td>
+      <td *ngIf="page !== 'alarms' && page !== 'logs' && user.role != 'user'" class="col-5 text-center">
+        <fa-icon (click)="onClickDelete(content[i + itemsPerPage * (p - 1)].id)" [icon]="trash" class="red fa-lg"
+          *ngIf="canDelete(content[i + itemsPerPage * (p - 1)])"></fa-icon>
+        <span *ngIf="!canDelete(content[i + itemsPerPage * (p - 1)])">_</span>
+      </td>
+    </tr>
+  </tbody>
 </table>
 
-<pagination-controls
-  *ngIf="isTableEmpty() && page == 'devices'"
-  style="display: flex; justify-content: center"
-  (pageChange)="p = $event"
-></pagination-controls>
+<pagination-controls *ngIf="isTableEmpty() && page == 'devices'" style="display: flex; justify-content: center"
+  (pageChange)="p = $event"></pagination-controls>
 
 <h2 *ngIf="!isTableEmpty()" style="display: flex; justify-content: center">
   Aucune donnée

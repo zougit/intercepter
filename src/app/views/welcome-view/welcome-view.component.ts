@@ -231,11 +231,16 @@ export class WelcomeViewComponent
           createSeries('Directeur', 'director');
           createSeries('Employé', 'employe');
           // Add legend
-          let legend = chart.children.push(am5.Legend.new(root, {}));
+          let legend = chart.children.push(
+            am5.Legend.new(root, {
+              centerX: am5.p50,
+              x: am5.p50,
+            })
+          );
           legend.data.setAll(chart.series.values);
           this.root = root;
         });
-        this.cpt++
+        this.cpt++;
       }
     }
 

@@ -30,8 +30,8 @@ export class AppComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private readonly translocoService: TranslocoService,
-    private readonly afa: Auth,
+    private translocoService: TranslocoService,
+    private afa: Auth,
     private router: Router
   ) {}
 

@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Auth, onAuthStateChanged } from '@angular/fire/auth';
 import {
+  GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
 } from 'firebase/auth';
-import { Firestore } from '@angular/fire/firestore';
+import { Firestore, setDoc } from '@angular/fire/firestore';
 import * as FireStore from 'firebase/firestore';
 import { BehaviorSubject } from 'rxjs';
 
@@ -63,6 +65,26 @@ export class AuthService {
         rej();
       }
     });
+  }
+
+  async googleSignin() {
+    const provider = new GoogleAuthProvider();
+    const credential = await signInWithPopup(this.afa, provider);
+    return this.updateUserData(credential.user);
+  }
+
+  private updateUserData(user: any) {
+    // Sets user data to firestore on login
+    const userRef = FireStore.doc(this.afs, `users/${user.uid}`);
+
+    const data = {
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+    };
+
+    return setDoc(userRef, data, { merge: true });
   }
 
   public isLoggedIn() {
